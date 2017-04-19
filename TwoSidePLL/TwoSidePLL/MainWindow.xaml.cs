@@ -18,24 +18,14 @@ namespace TwoSidePLL {
         Practicer practicer;
 
         public MainWindow() {
-            try
-            {
-                InitializeComponent();
-
-                initializeFrontView();
-                initializeBackView();
-                initializeScrambles();
-                initializeViews();
-       
-                theCube = new Cube();
-                practicer = new Practicer(this, theCube);
-                updateGui();
-            }
-            catch (System.NullReferenceException ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-             
+            InitializeComponent();
+            initializeFrontView();
+            initializeBackView();
+            initializeScrambles();
+            initializeViews();
+            theCube = new Cube();
+            practicer = new Practicer(this, theCube);
+            updateGui();
         }
         private void click_startPractice(object sender, RoutedEventArgs e) {
             int practiceLength = Convert.ToInt32((comPracticeSize.SelectedItem as ComboBoxItem).Content);
@@ -57,7 +47,7 @@ namespace TwoSidePLL {
                     pluser.Content += " +";// set result
                 } else {
                     minuser.Content += " " + practicer.Correct.ToString();
-                    
+
                     // TODO: add to penalties AS;DLFKASD;LFKASD';LFKASLDKJFA;SLDKJFA;SLDKJFA;SLDKFJA;LSKJ423O1897491287491
                     //practicer.penalties.Enqueue(practicer.Correct.ToUpper()[0].ToString());
                     //progressBar1.Maximum++;
@@ -65,7 +55,7 @@ namespace TwoSidePLL {
 
                 if(practicer.nextScramble()) {// go next guess
                     updateGui();               // show it
-                    
+
                 } else {
                     practicer.Running = false;
                 }//ei
@@ -107,7 +97,7 @@ namespace TwoSidePLL {
             cbRight.IsChecked   = cbView.IsChecked;
             cbBack.IsChecked    = cbView.IsChecked;
             cbFace.IsChecked    = cbView.IsChecked;
-           //cbTurnF2L.IsChecked = cbView.IsChecked;
+            //cbF2Lauf.IsChecked = cbView.IsChecked;
         }
         private void click_group_Topcolor(object sender, RoutedEventArgs e)
         {
@@ -145,11 +135,13 @@ namespace TwoSidePLL {
         { // generate new set of tasks
             Random random = new Random();
             List<CheckBox> selections = form.getSelectedScrambles();
-            for (/**/; tasksToGenerate > 0; tasksToGenerate--) {
-                int randomIndex = random.Next(0, selections.Count);
-                string text = selections[randomIndex].Content.ToString();
-                tasks.Enqueue(text);
-            }//for
+            if (selections.Count > 0) {
+                for (/**/; tasksToGenerate > 0; tasksToGenerate--) {
+                    int randomIndex = random.Next(0, selections.Count);
+                    string text = selections[randomIndex].Content.ToString();
+                    tasks.Enqueue(text);
+                }//for
+            }//if
         }
         public bool nextScramble() {
             var random = new Random();
@@ -159,6 +151,7 @@ namespace TwoSidePLL {
             if (lists.Count > 0) {
                 int index = random.Next(0, lists.Count);
 
+                // Maint scramble, setup the actual PERM
                 string newTaskTodo = lists[index].Dequeue();
                 MessageBox.Show(newTaskTodo);
                 cube.resetStickers(); // TODO: reset to random color in dependence of the checkboxes
@@ -166,15 +159,18 @@ namespace TwoSidePLL {
 
                 //AUF/AUF part
                 var selectedViews = form.getSelectedViews();
-                int aufIndx = random.Next(0, selectedViews.Count);
-                cube.execute(selectedViews[aufIndx]); // AUF
-                
-                 // F2l-AUF is fixed 4 rotations max
-                string auf2Task = "U ";
-                for (aufIndx = random.Next(0, 4); aufIndx > 0; aufIndx--) {
-                    auf2Task += "U ";
+                if (selectedViews.Count > 0) {
+                    int aufIndx = random.Next(0, selectedViews.Count);
+                    cube.execute(selectedViews[aufIndx]); // AUF
                 }
-                cube.execute(auf2Task); // F2L-Auf
+                 // F2l-AUF is fixed 4 rotations max
+                if (form.cbF2Lauf.IsChecked.Value) {
+                    string auf2Task = "d ";
+                    for(int aufIndx = random.Next(0, 3); aufIndx > 0; aufIndx--) {
+                        auf2Task += "d ";
+                    }//for
+                    cube.execute(auf2Task); // F2L-Auf
+                }//if
                 return true; // got a task
             }//if
             return false; // got no more tasks
@@ -289,8 +285,8 @@ namespace TwoSidePLL {
         }
         private void initializeViews()
         {
-            views[cbFace]  = "";   //  0U
-            views[cbRight] = "U";  //  1U       
+            views[cbFace]  = "U U'";   //  0U noop
+            views[cbRight] = "U";  //  1U
             views[cbBack]  = "U2"; //  2U
             views[cbLeft]  = "U'"; //  1U'
            // views.Add(cbTurnF2L); // not needed, always 0..4 random
@@ -429,36 +425,3 @@ namespace TwoSidePLL {
         MainWindow form; // temporary. must use a delegate
     }
 }//ns
-
-
-
-
-
-
-/*
-        private void Grid_MouseMove(object sender, MouseEventArgs e) {
-//            Point p = e.GetPosition(theGrid);
-//            this.Title = string.Format("GetPosition(btn1): X = {0}, Y = {1}", p.X, p.Y);
-        }
-
-        private int cnt = 0;
-        private void theGrid_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-           
-            cnt++;
-            if (cnt > 4)
-            {
-                //this.Title = string.Format("({0}, {1}) ", p.X, p.Y);
-                cnt = 0;
-                this.textBox1.Text = "";
-            }
-            else
-            {
-                Point p = e.GetPosition(theGrid);
-                if(this.textBox1.Text.Length != 0) {
-                    this.textBox1.Text += ", ";
-                }
-                this.textBox1.Text += string.Format("{0} {1}", p.X, p.Y);
-            }
-        }
-        */
