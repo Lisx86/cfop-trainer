@@ -153,7 +153,7 @@ namespace TwoSidePLL {
 
                 // Maint scramble, setup the actual PERM
                 string newTaskTodo = lists[index].Dequeue();
-                MessageBox.Show(newTaskTodo);
+                //MessageBox.Show(newTaskTodo);
                 cube.resetStickers(); // TODO: reset to random color in dependence of the checkboxes
                 Correct = cubeManipulator.scrambleTheCube(cube, newTaskTodo); // generate the scramble;
 
