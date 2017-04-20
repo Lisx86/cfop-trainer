@@ -33,29 +33,26 @@ namespace TwoSidePLL {
             if (practicer.nextScramble())  {// generate next scramble
                 updateGui();                // show it
                 practicer.Running = true;
-                progressBar1.Minimum = 1;
-                progressBar1.Maximum = practicer.tasks.Count;
-                progressBar1.Value = 1;
+                pbCorrectAnswers.Minimum = 0;
+                pbCorrectAnswers.Maximum = practicer.TasksCount+1;
+                pbCorrectAnswers.Value = 0;
             }
         }
         private void keyDown(object sender, KeyEventArgs e) {
-            if (practicer.Running) {
-                Title = e.Key.ToString();
-                char ch = char.ToLower(Title[0]);
+            
+            if (practicer.Running && e.Key.ToString().Length == 1) {
+                char ch = char.ToLower(e.Key.ToString()[0]);
+                Title += ch;  
 
                 if (practicer.verify(ch)) { // verify 
-                    pluser.Content += " +";// set result
+                    pbCorrectAnswers.Value++;
                 } else {
-                    minuser.Content += " " + practicer.Correct.ToString();
-
-                    // TODO: add to penalties AS;DLFKASD;LFKASD';LFKASLDKJFA;SLDKJFA;SLDKJFA;SLDKFJA;LSKJ423O1897491287491
-                    //practicer.penalties.Enqueue(practicer.Correct.ToUpper()[0].ToString());
-                    //progressBar1.Maximum++;
+                    lbRefine.Content += " " + practicer.TaskName.ToString();
+                    practicer.savePenalty(); // adds penality: failed task +2 more
                 }//ei
 
                 if(practicer.nextScramble()) {// go next guess
                     updateGui();               // show it
-
                 } else {
                     practicer.Running = false;
                 }//ei
@@ -122,14 +119,13 @@ namespace TwoSidePLL {
 
     partial class Practicer {
         Cube cube;
-        CubeManip cubeManipulator;
-        internal Queue<string> tasks     = new Queue<string>();
-        internal Queue<string> penalties = new Queue<string>();
-
+        PLLManager pllman = new PLLManager();
+        Queue<string> tasks     = new Queue<string>();
+        Queue<Tuple<string, string, Side>> penalties = new Queue<Tuple<string, string, Side>>(); // Failed tasks command to execute
+        //     taskname,  execcommand,  topcolor
         public Practicer(MainWindow form, Cube cube) {
             this.form = form;
             this.cube = cube;
-            cubeManipulator = new CubeManip();
         }
         public void newPractice(int tasksToGenerate)
         { // generate new set of tasks
@@ -143,42 +139,64 @@ namespace TwoSidePLL {
                 }//for
             }//if
         }
-        public bool nextScramble() {
-            var random = new Random();
-            var lists = new List<Queue<string>>();
-            if(tasks.Count > 0) {     lists.Add(tasks);     }
-            if(penalties.Count > 0) { lists.Add(penalties); }
-            if (lists.Count > 0) {
-                int index = random.Next(0, lists.Count);
-
-                // Maint scramble, setup the actual PERM
-                string newTaskTodo = lists[index].Dequeue();
-                //MessageBox.Show(newTaskTodo);
-                cube.resetStickers(); // TODO: reset to random color in dependence of the checkboxes
-                Correct = cubeManipulator.scrambleTheCube(cube, newTaskTodo); // generate the scramble;
+        public bool nextScramble() {            
+            // got any tasks
+            if (tasks.Count > 0) {
+                var random = new Random();
+                TaskName        = tasks.Dequeue(); // already randomed
+                ExecutedCommand = pllman.getTaskCommand(TaskName);
+                SideMovedTotop = Side.Up; // standard yellow side
 
                 //AUF/AUF part
                 var selectedViews = form.getSelectedViews();
                 if (selectedViews.Count > 0) {
                     int aufIndx = random.Next(0, selectedViews.Count);
-                    cube.execute(selectedViews[aufIndx]); // AUF
+                    ExecutedCommand += " " + selectedViews[aufIndx]; // AUF
                 }
-                 // F2l-AUF is fixed 4 rotations max
+
+                // F2l-AUF is fixed 4 rotations max
                 if (form.cbF2Lauf.IsChecked.Value) {
-                    string auf2Task = "d ";
+                    ExecutedCommand += " d";
                     for(int aufIndx = random.Next(0, 3); aufIndx > 0; aufIndx--) {
-                        auf2Task += "d ";
+                        ExecutedCommand += " d";
                     }//for
-                    cube.execute(auf2Task); // F2L-Auf
                 }//if
+                
+                // Maint scramble, setup the actual PERM
+                cube.resetStickers(); // TODO: reset to random color in dependence of the checkboxes
+                cube.execute(ExecutedCommand); // generate the scramble;
+
+               // form.Title = TaskName;
                 return true; // got a task
-            }//if
+            } else if(penalties.Count > 0)  {
+                var tuple = penalties.Dequeue(); // already randomed
+                TaskName        = tuple.Item1;
+                ExecutedCommand = tuple.Item2;
+                cube.resetStickers(); // TODO: reset to random color in dependence of the checkboxes
+                cube.execute(ExecutedCommand); // generate the scramble;
+                return true;
+            }
             return false; // got no more tasks
         }
         public bool verify(char ch) {
-            return ch.ToString().ToUpper()[0] == Correct[0];
+            return ch.ToString().ToUpper()[0] == TaskName[0];
         }
+        internal void savePenalty() {
+            penalties.Enqueue(new Tuple<string, string, Side>(TaskName, ExecutedCommand, SideMovedTotop));
 
+            
+            List<CheckBox> selections = form.getSelectedScrambles();
+            if (selections.Count > 0) {
+                Random random = new Random();
+                for (int tasksToGenerate = 2; tasksToGenerate > 0; tasksToGenerate--)
+                {
+                    int randomIndex = random.Next(0, selections.Count);
+                    string text = selections[randomIndex].Content.ToString();
+                    penalties.Enqueue(new Tuple<string, string, Side>(text, pllman.getTaskCommand(text), SideMovedTotop));
+                }//for
+            }//if
+        
+        }
     }//cl
     
     public partial class MainWindow : Window
@@ -419,9 +437,15 @@ namespace TwoSidePLL {
                 form.cbGreen.IsEnabled = !value;
                 form.cbOrange.IsEnabled = !value;
                 form.cbBlue.IsEnabled = !value;
+
+                form.pbCorrectAnswers.Value = 0;
+                form.lbRefine.Content = "";
             }
         }
-        internal string Correct { get; set; }
+        internal string TaskName { get; set; }
+        internal string ExecutedCommand { get; set; }
+        internal Side SideMovedTotop { get; set; }
+        internal int TasksCount { get { return tasks.Count;  } }
         MainWindow form; // temporary. must use a delegate
     }
 }//ns
