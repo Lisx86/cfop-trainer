@@ -280,7 +280,7 @@
             </Grid>
         </GroupBox>
         <Label Content="Correct answers:" Height="31" HorizontalAlignment="Left" Margin="11,585,0,0" Name="pluser" VerticalAlignment="Top" FontSize="14" Width="133" />
-        <Label Content="Need to refine:" FontSize="14" Height="31" HorizontalAlignment="Left" Margin="368,585,0,0" Name="label1" VerticalAlignment="Top" Width="133" />
+        <Label Content="Refine:" FontSize="14" Height="31" HorizontalAlignment="Left" Margin="368,585,0,0" Name="label1" VerticalAlignment="Top" Width="133" />
         <Label HorizontalAlignment="Left" Margin="384,0,0,8" Name="lbRefine" Width="374" FontSize="20" FontWeight="Bold" Foreground="#FFFC7E7E" Height="36" VerticalAlignment="Bottom" Content="vasea" />
     </Grid>
 </Window>

@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Diagnostics;
 
 namespace TwoSidePLL { 
     public partial class MainWindow : Window {
@@ -48,6 +49,8 @@ namespace TwoSidePLL {
                     pbCorrectAnswers.Value++;
                 } else {
                     lbRefine.Content += " " + practicer.TaskName.ToString();
+                    practicer.savePenalty(); // adds penality: failed task +2 more
+                    practicer.savePenalty(); // adds penality: failed task +2 more
                     practicer.savePenalty(); // adds penality: failed task +2 more
                 }//ei
 
@@ -383,11 +386,22 @@ namespace TwoSidePLL {
         }
     }
     partial class Practicer {
+        Stopwatch watch = Stopwatch.StartNew();
         bool m_running = false;
         public bool Running
         {
             get { return m_running; }
             set {
+                if(value) {
+                    watch = Stopwatch.StartNew();
+                } else {
+                    watch.Stop();
+                    string answer = string.Format("{0:D2}m:{1:D2}s:{2:D3}ms",
+                                            watch.Elapsed.Minutes,
+                                            watch.Elapsed.Seconds,
+                                            watch.Elapsed.Milliseconds);
+                    form.Title = answer;
+                }
                 m_running = value;
                 form.cbCorrect.IsEnabled = !value;
                 form.cbDiagonal.IsEnabled = !value;
