@@ -121,6 +121,7 @@ namespace TwoSidePLL {
     }//cl
 
     partial class Practicer {
+        Random random = new Random();
         Cube cube;
         PLLManager pllman = new PLLManager();
         Queue<string> tasks     = new Queue<string>();
@@ -132,7 +133,6 @@ namespace TwoSidePLL {
         }
         public void newPractice(int tasksToGenerate)
         { // generate new set of tasks
-            Random random = new Random();
             List<CheckBox> selections = form.getSelectedScrambles();
             if (selections.Count > 0) {
                 for (/**/; tasksToGenerate > 0; tasksToGenerate--) {
@@ -145,7 +145,6 @@ namespace TwoSidePLL {
         public bool nextScramble() {            
             // got any tasks
             if (tasks.Count > 0) {
-                var random = new Random();
                 TaskName        = tasks.Dequeue(); // already randomed
                 ExecutedCommand = pllman.getTaskCommand(TaskName);
                 SideMovedTotop = Side.Up; // standard yellow side
@@ -190,7 +189,6 @@ namespace TwoSidePLL {
             
             List<CheckBox> selections = form.getSelectedScrambles();
             if (selections.Count > 0) {
-                Random random = new Random();
                 for (int tasksToGenerate = 2; tasksToGenerate > 0; tasksToGenerate--)
                 {
                     int randomIndex = random.Next(0, selections.Count);

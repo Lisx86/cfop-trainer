@@ -47,7 +47,7 @@ namespace TwoSidePLL
                 data[Side.Left].Add(Colors.Blue);
                 data[Side.Front].Add(Colors.Red);
                 data[Side.Right].Add(Colors.Green);
-                data[Side.Back].Add(Colors.Orange);
+                data[Side.Back].Add(Colors.DarkOrange);
                 data[Side.Up].Add(Colors.Yellow);
                 data[Side.Down].Add(Colors.White);
             }
