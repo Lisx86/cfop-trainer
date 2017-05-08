@@ -24,19 +24,22 @@ namespace TwoSidePLL {
             initializeBackView();
             initializeScrambles();
             initializeViews();
+            initializeTotops();
             theCube = new Cube();
             practicer = new Practicer(this, theCube);
             updateGui();
         }
         private void click_startPractice(object sender, RoutedEventArgs e) {
-            int practiceLength = Convert.ToInt32((comPracticeSize.SelectedItem as ComboBoxItem).Content);
-            practicer.newPractice(practiceLength);
-            if (practicer.nextScramble())  {// generate next scramble
+            string selectedText = (comPracticeSize.SelectedItem as ComboBoxItem).Content.ToString();
+            if (selectedText.Length > 3)
+                practicer.newPracticeAllcased();
+            else //                        practice length
+                practicer.newPractice( Convert.ToInt32(selectedText) );
+
+            // generate next scramble
+            if (practicer.nextScramble()) {
                 updateGui();                // show it
-                practicer.Running = true;
-                pbCorrectAnswers.Minimum = 0;
-                pbCorrectAnswers.Maximum = practicer.TasksCount+1;
-                pbCorrectAnswers.Value = 0;
+                practicer.Running = true;   // disable controls while guessing
             }
         }
         private void keyDown(object sender, KeyEventArgs e) {
@@ -48,10 +51,10 @@ namespace TwoSidePLL {
                 if (practicer.verify(ch)) { // verify 
                     pbCorrectAnswers.Value++;
                 } else {
-                    lbRefine.Content += " " + practicer.TaskName.ToString();
-                    practicer.savePenalty(); // adds penality: failed task +2 more
-                    practicer.savePenalty(); // adds penality: failed task +2 more
-                    practicer.savePenalty(); // adds penality: failed task +2 more
+                    lbRefine.Content += " " + practicer.CurrentTask.getName();
+                    practicer.savePenalty(3); // adds penality: failed task +3 more
+                    practicer.savePenalty(3); // 
+                    practicer.savePenalty(3); // 
                 }//ei
 
                 if(practicer.nextScramble()) {// go next guess
@@ -113,100 +116,115 @@ namespace TwoSidePLL {
             Title = theCube.execute(tbMovesTodo.Text);
             updateGui();
         }
-        private void click_reset(object sender, RoutedEventArgs e)
-        {
-            theCube.resetStickers();
+        private void click_reset(object sender, RoutedEventArgs e) {
+            theCube.resetStickers(Side.Up);
             updateGui();
         }
+
     }//cl
+
+    class Task : Pcase {
+        Side totopSide;
+        string auf;
+        string f2lauf;
+        public Task(string name, string todo, Side totopSide, string auf = "", string f2lauf = "")
+        : base(name, todo) {
+            this.totopSide = totopSide;
+            this.auf = auf;
+            this.f2lauf = f2lauf;
+        }
+        public override string getTodo() {
+            return base.getTodo() + " " + auf + " " + f2lauf;
+        }
+        public Side getTotopSide() {
+            return totopSide;
+        }
+    }
 
     partial class Practicer {
         Random random = new Random();
         Cube cube;
         PLLManager pllman = new PLLManager();
-        Queue<string> tasks     = new Queue<string>();
-        Queue<Tuple<string, string, Side>> penalties = new Queue<Tuple<string, string, Side>>(); // Failed tasks command to execute
-        //     taskname,  execcommand,  topcolor
+        Queue<Task> tasks     = new Queue<Task>();
+        Queue<Task> penalties = new Queue<Task>();
+        public Task CurrentTask { get; set; }
+
         public Practicer(MainWindow form, Cube cube) {
             this.form = form;
             this.cube = cube;
         }
-        public void newPractice(int tasksToGenerate)
-        { // generate new set of tasks
-            List<CheckBox> selections = form.getSelectedScrambles();
-            if (selections.Count > 0) {
-                for (/**/; tasksToGenerate > 0; tasksToGenerate--) {
-                    int randomIndex = random.Next(0, selections.Count);
-                    string text = selections[randomIndex].Content.ToString();
-                    tasks.Enqueue(text);
+        public void newPractice(int tasksToEnque) {
+              for(/**/; tasksToEnque > 0; tasksToEnque--) {
+                Task nextTask = generateRandomTask(
+                      form.getSelectedScrambles()
+                    , form.getSelectedViews()
+                    , form.getSelectedTotops()
+                );
+                if(nextTask != null) 
+                    tasks.Enqueue(nextTask);
+            }//for
+        }
+        public void newPracticeAllcased() { // generate new set of tasks
+            var selectedTotops = form.getSelectedTotops();
+            int colIndx = random.Next(0, selectedTotops.Count);
+            Side totopSide = selectedTotops.Count > 0 ? selectedTotops[colIndx] : Side.Up; // up by default
+
+            List<Task> orderedTasks = new List<Task>();
+            foreach(var selPcaseName in form.getSelectedScrambles()) {
+                foreach(var selView in form.getSelectedViews()) {
+                    Task nextTask = new Task(
+                          selPcaseName
+                        , pllman.getTaskCommand(selPcaseName)
+                        , totopSide
+                        , selView
+                        , ""
+                    );
+                    orderedTasks.Add(nextTask);
                 }//for
-            }//if
+            }//for
+
+            // randomize the tasks
+            while(orderedTasks.Count > 0) {
+                var randIndex = random.Next(0, orderedTasks.Count);
+                tasks.Enqueue( orderedTasks[randIndex] );
+                orderedTasks.RemoveAt(randIndex);
+            }
         }
         public bool nextScramble() {            
-            // got any tasks
-            if (tasks.Count > 0) {
-                TaskName        = tasks.Dequeue(); // already randomed
-                ExecutedCommand = pllman.getTaskCommand(TaskName);
-                SideMovedTotop = Side.Up; // standard yellow side
-
-                //AUF/AUF part
-                var selectedViews = form.getSelectedViews();
-                if (selectedViews.Count > 0) {
-                    int aufIndx = random.Next(0, selectedViews.Count);
-                    ExecutedCommand += " " + selectedViews[aufIndx]; // AUF
-                }
-
-                // F2l-AUF is fixed 4 rotations max
-                if (form.cbF2Lauf.IsChecked.Value) {
-                    ExecutedCommand += " d";
-                    for(int aufIndx = random.Next(0, 3); aufIndx > 0; aufIndx--) {
-                        ExecutedCommand += " d";
-                    }//for
-                }//if
-                
-                // Maint scramble, setup the actual PERM
-                cube.resetStickers(); // TODO: reset to random color in dependence of the checkboxes
-                cube.execute(ExecutedCommand); // generate the scramble;
-
-               // form.Title = TaskName;
+            CurrentTask =        tasks.Count > 0 ? tasks.Dequeue() 
+                           : penalties.Count > 0 ? penalties.Dequeue()
+                           : null;
+            
+            if (CurrentTask != null) {                             // check if got any tasks
+                cube.resetStickers( CurrentTask.getTotopSide() );  // prepare the cube
+                cube.execute( CurrentTask.getTodo() );             // rotate the cube
                 return true; // got a task
-            } else if(penalties.Count > 0)  {
-                var tuple = penalties.Dequeue(); // already randomed
-                TaskName        = tuple.Item1;
-                ExecutedCommand = tuple.Item2;
-                cube.resetStickers(); // TODO: reset to random color in dependence of the checkboxes
-                cube.execute(ExecutedCommand); // generate the scramble;
-                return true;
             }
             return false; // got no more tasks
         }
         public bool verify(char ch) {
-            return ch.ToString().ToUpper()[0] == TaskName[0];
+            return CurrentTask != null && CurrentTask.getName()[0] == ch.ToString().ToUpper()[0];
         }
-        internal void savePenalty() {
-            penalties.Enqueue(new Tuple<string, string, Side>(TaskName, ExecutedCommand, SideMovedTotop));
+        public void savePenalty(int deceptiveTasksCount) {
+            penalties.Enqueue(CurrentTask);
 
-            
-            List<CheckBox> selections = form.getSelectedScrambles();
-            if (selections.Count > 0) {
-                for (int tasksToGenerate = 2; tasksToGenerate > 0; tasksToGenerate--)
-                {
-                    int randomIndex = random.Next(0, selections.Count);
-                    string text = selections[randomIndex].Content.ToString();
-                    penalties.Enqueue(new Tuple<string, string, Side>(text, pllman.getTaskCommand(text), SideMovedTotop));
-                }//for
-            }//if
-        
+            for(/**/; deceptiveTasksCount > 0; deceptiveTasksCount--) {
+                Task nextTask = generateRandomTask(
+                      form.getSelectedScrambles()
+                    , form.getSelectedViews()
+                    , new List<Side>(){ CurrentTask.getTotopSide() }
+                );
+                penalties.Enqueue(nextTask);
+            }//for
         }
     }//cl
     
-    public partial class MainWindow : Window
-    {
+    public partial class MainWindow : Window {
         Dictionary<Side, List<Polygon>> uiData;
         Dictionary<Side, List<Rectangle>> uiBackView;
         List<CheckBox> scrambles = new List<CheckBox>(); // i think it should be a part of practicer
         Dictionary<CheckBox, string/*AUF*/> views = new Dictionary<CheckBox, string>();     // AUF for t
-        List<CheckBox> topColors = new List<CheckBox>(); //
+        Dictionary<CheckBox, Side> totops = new Dictionary<CheckBox, Side>(); //
 
         private void initializeFrontView()
         {
@@ -302,35 +320,31 @@ namespace TwoSidePLL {
             scrambles.Add(cbRb);
             scrambles.Add(cbF);
         }
-        private void initializeViews()
-        {
-            views[cbFace]  = "U U'";   //  0U noop
+        private void initializeViews() {
+            views[cbFace]  = "";   //  0U noop
             views[cbRight] = "U";  //  1U
             views[cbBack]  = "U2"; //  2U
             views[cbLeft]  = "U'"; //  1U'
            // views.Add(cbTurnF2L); // not needed, always 0..4 random
         }
-        private void initializeTopcolors()
-        {
-            topColors.Add(cbYellow);
-            topColors.Add(cbWhite);
-            topColors.Add(cbRed);
-            topColors.Add(cbGreen);
-            topColors.Add(cbOrange);
-            topColors.Add(cbBlue);
+        private void initializeTotops() {
+            totops.Add(cbYellow, Side.Up);
+            totops.Add(cbWhite,  Side.Down);
+            totops.Add(cbRed,    Side.Front);
+            totops.Add(cbGreen,  Side.Right);
+            totops.Add(cbOrange, Side.Back);
+            totops.Add(cbBlue,   Side.Left);
         }
-        internal List<CheckBox> getSelectedScrambles()
-        {
-            List<CheckBox> ret = new List<CheckBox>();
+        internal List<string> getSelectedScrambles() {
+            List<string> ret = new List<string>();
             foreach(CheckBox cb in scrambles) {
                 if(cb.IsChecked.Value) {
-                    ret.Add(cb);
+                    ret.Add(cb.Content.ToString());
                 }
             }//for
             return ret;
         }
-        internal List<string/*AUF*/> getSelectedViews()
-        {
+        internal List<string/*AUF*/> getSelectedViews() {
             var ret = new List<string/*AUF*/>();
             foreach (KeyValuePair<CheckBox, string> pair in views) {
                 CheckBox cb = pair.Key;
@@ -340,18 +354,17 @@ namespace TwoSidePLL {
             }//for
             return ret;
         }
-        internal List<CheckBox> getSelectedColors()
-        {
-            List<CheckBox> ret = new List<CheckBox>();
-            foreach (CheckBox cb in topColors) {
+        internal List<Side> getSelectedTotops() {
+            List<Side> ret = new List<Side>();
+            foreach (KeyValuePair<CheckBox, Side> pair in totops) {
+                CheckBox cb = pair.Key;
                 if (cb.IsChecked.Value) {
-                    ret.Add(cb);
+                    ret.Add(pair.Value);
                 }
             }//for
             return ret;
         }
-        private void updateGui()
-        {
+        private void updateGui() {
             Dictionary<Side, List<Color>> cubeData = theCube.getData();
             foreach (Side side in Enum.GetValues(typeof(Side)))
             {
@@ -384,6 +397,7 @@ namespace TwoSidePLL {
         }
     }
     partial class Practicer {
+        MainWindow form; // temporary. must use a delegate
         Stopwatch watch = Stopwatch.StartNew();
         bool m_running = false;
         public bool Running
@@ -392,6 +406,9 @@ namespace TwoSidePLL {
             set {
                 if(value) {
                     watch = Stopwatch.StartNew();
+                    form.pbCorrectAnswers.Minimum = 0;
+                    form.pbCorrectAnswers.Maximum = TasksCount + 1;
+                    form.pbCorrectAnswers.Value = 0;
                 } else {
                     watch.Stop();
                     string answer = string.Format("{0:D2}m:{1:D2}s:{2:D3}ms",
@@ -454,10 +471,31 @@ namespace TwoSidePLL {
                 form.lbRefine.Content = "";
             }
         }
-        internal string TaskName { get; set; }
-        internal string ExecutedCommand { get; set; }
-        internal Side SideMovedTotop { get; set; }
-        internal int TasksCount { get { return tasks.Count;  } }
-        MainWindow form; // temporary. must use a delegate
+        public int TasksCount { get { return tasks.Count;  } }
+        Task generateRandomTask(List<string> selectedPcases, List<string> selectedViews, List<Side> selectedTotops) {
+            if(selectedPcases.Count == 0 || selectedViews.Count == 0 || selectedTotops.Count == 0) 
+                return null;
+
+            //AUF/AUF part             
+            int aufIndx = random.Next(0, selectedViews.Count);
+            string auf = " " + selectedViews[aufIndx]; // AUF
+
+            // F2l-AUF is fixed 4 rotations max
+            string auf2l = "";
+            for(aufIndx = random.Next(0, 4); form.cbF2Lauf.IsChecked.Value && aufIndx > 0; aufIndx--) {
+                auf2l += " d"; // add 0..3 turnd of 'd'
+            }//for
+
+            // Totopside
+            int colIndx = random.Next(0, selectedTotops.Count);
+            Side totopSide = selectedTotops[colIndx];
+
+            // select the concrete PLL-case which has to be performed: (Aa, Z, Jb, Ra, Y, Nb, ...)
+            int randomIndex = random.Next(0, selectedPcases.Count);
+            string randomCaseName = selectedPcases[randomIndex];
+
+            // create the task instance and enqueue it
+            return new Task(randomCaseName, pllman.getTaskCommand(randomCaseName), totopSide, auf, auf2l);
+        }
     }
 }//ns

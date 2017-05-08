@@ -5,23 +5,31 @@ using System.Text;
 using System.Windows;
 using System.Windows.Media;
 
-
 namespace TwoSidePLL
 {
-    class Cube: Object
-
-    {
+    class Cube: Object{
         // there are 6 lists with 9 stickers each
         Dictionary<Side, List<Color>/*stickers list*/> data = new Dictionary<Side,List<Color>>();
-        public Cube()
-        {
-            data.Add(Side.Left, new List<Color>());
+        Dictionary<Side, Color> colorScheme = new Dictionary<Side,Color>();
+        public Cube() {
+            // make room for stickers
+            data.Add(Side.Left,  new List<Color>());
             data.Add(Side.Front, new List<Color>());
             data.Add(Side.Right, new List<Color>());
-            data.Add(Side.Back, new List<Color>());
-            data.Add(Side.Up, new List<Color>());
-            data.Add(Side.Down, new List<Color>());
-            resetStickers();
+            data.Add(Side.Back,  new List<Color>());
+            data.Add(Side.Up,    new List<Color>());
+            data.Add(Side.Down,  new List<Color>());
+
+            // standard color scheme (set custom colors right here)
+            colorScheme.Add(Side.Left,  Colors.Blue);
+            colorScheme.Add(Side.Front, Colors.Red);
+            colorScheme.Add(Side.Right, Colors.Green);
+            colorScheme.Add(Side.Back,  Colors.DarkOrange);
+            colorScheme.Add(Side.Up,    Colors.Yellow);
+            colorScheme.Add(Side.Down,  Colors.White);
+
+            // colorize the stickers
+            resetStickers(Side.Up);
         }
         private void SwapStickers(Side lhsSide, int lhsIndex, Side rhsSide, int rhsIndex)
         {
@@ -29,12 +37,10 @@ namespace TwoSidePLL
             data[lhsSide][lhsIndex] = data[rhsSide][rhsIndex];
             data[rhsSide][rhsIndex] = temp;
         }
-        internal Dictionary<Side, List<Color>> getData()
-        {
-            return data;
+        internal Dictionary<Side, List<Color>> getData(){ 
+            return data; //called only from GUI updater, no one else should get this
         }
-        public void resetStickers()
-        {
+        internal void resetStickers(Side totopSide) {
             data[Side.Left].Clear();
             data[Side.Front].Clear();
             data[Side.Right].Clear();
@@ -42,19 +48,25 @@ namespace TwoSidePLL
             data[Side.Up].Clear();
             data[Side.Down].Clear();
 
-            for (int cnt = 0; cnt < 9; cnt++)
-            {
-                data[Side.Left].Add(Colors.Blue);
+            // add 9-same-color-stickers to each of 6 sides
+            for (int cnt = 0; cnt < 9; cnt++) {
+                data[Side.Left]. Add(Colors.Blue);
                 data[Side.Front].Add(Colors.Red);
                 data[Side.Right].Add(Colors.Green);
-                data[Side.Back].Add(Colors.DarkOrange);
-                data[Side.Up].Add(Colors.Yellow);
-                data[Side.Down].Add(Colors.White);
+                data[Side.Back]. Add(Colors.DarkOrange);
+                data[Side.Up].   Add(Colors.Yellow);
+                data[Side.Down]. Add(Colors.White);
             }
 
-           // data[Side.Front][1] = Colors.Green;
+            switch(totopSide) {
+                case Side.Front: execute("x"); break;
+                case Side.Right: execute("z'"); break;
+                case Side.Back:  execute("x'"); break;
+                case Side.Left:  execute("z"); break;
+                case Side.Down:  execute("x2"); break;
+                case Side.Up: /* Do nothing. it's already there. */ break;
+            }
         }
-
         internal void moveU()
         {
             SwapStickers(Side.Front, 0, Side.Right, 0);
@@ -68,7 +80,6 @@ namespace TwoSidePLL
             SwapStickers(Side.Front, 2, Side.Right, 2);
             SwapStickers(Side.Right, 2, Side.Back, 0);
             SwapStickers(Side.Back, 0, Side.Left, 0);
-
 
             // Top stickers
             SwapStickers(Side.Up, 3, Side.Up, 7);
@@ -114,7 +125,7 @@ namespace TwoSidePLL
             SwapStickers(Side.Down, 0, Side.Down, 6);
             SwapStickers(Side.Down, 5, Side.Down, 1);
             SwapStickers(Side.Down, 7, Side.Down, 5);
-            SwapStickers(Side.Down, 3, Side.Down, 7);     
+            SwapStickers(Side.Down, 3, Side.Down, 7);
         }
 
         internal void moveR()
@@ -160,14 +171,14 @@ namespace TwoSidePLL
             // Stickers from the sides
             SwapStickers(Side.Front, 0, Side.Up, 0);
             SwapStickers(Side.Up, 0, Side.Back, 6);
-            SwapStickers(Side.Back, 6, Side.Down, 6);            
+            SwapStickers(Side.Back, 6, Side.Down, 6);
 
             SwapStickers(Side.Front, 3, Side.Up, 3);
             SwapStickers(Side.Up, 3, Side.Back, 3);
             SwapStickers(Side.Back, 3, Side.Down, 3);
             SwapStickers(Side.Front, 6, Side.Up, 6);
             SwapStickers(Side.Up, 6, Side.Back, 0);
-            SwapStickers(Side.Back, 0, Side.Down, 0);     
+            SwapStickers(Side.Back, 0, Side.Down, 0);
 
             // LeftOnly stickers
             SwapStickers(Side.Left, 7, Side.Left, 5);
@@ -304,26 +315,21 @@ namespace TwoSidePLL
                     bool doubleTurn = item.Length > 1 && item[1] == '2';
                     bool prime = (item.Length == 2 && item[1] == '\'') || (item.Length == 3 && item[2] == '\'');
 
-                    if (!doubleTurn && !prime) // simple move
-                    {
-                        move(item[0]);
-                    }
-                    else if (!doubleTurn && prime) // prime
-                    {
-                        move(item[0]);
-                        move(item[0]);
-                        move(item[0]);
-                    }
-                    else if (doubleTurn)
-                    {
-                        move(item[0]);
-                        move(item[0]);
-                    }
+                    if (!doubleTurn && !prime) { // simple move
+                        atomicMove(item[0]);
+                    } else if (!doubleTurn && prime) {// prime
+                        atomicMove(item[0]);
+                        atomicMove(item[0]);
+                        atomicMove(item[0]);
+                    } else if (doubleTurn) {
+                        atomicMove(item[0]);
+                        atomicMove(item[0]);
+                    }//ei
                 }//if
             }//for
             return formattedMoves;
         }
-        internal string move(char moveType) {
+        internal string atomicMove(char moveType) {
             bool doubleSlice = moveType >= 'a' && moveType <= 'z';
             char ch = char.ToLower(moveType);
 
@@ -342,7 +348,7 @@ namespace TwoSidePLL
                 }//sw
 
             if (doubleSlice)
-                switch (ch){
+                switch (ch) {
                     case 'u': moveU(); moveEprime(); break;
                     case 'e': moveE(); moveEprime(); break;
                     case 'd': moveD(); moveE(); break;
@@ -360,8 +366,4 @@ namespace TwoSidePLL
             return "ok";
         }
     }//cl
-
-
-
-
-}
+}//ns
