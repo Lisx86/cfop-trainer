@@ -49,12 +49,15 @@ namespace TwoSidePLL {
                 Title += ch;  
 
                 if (practicer.verify(ch)) { // verify 
-                    pbCorrectAnswers.Value++;
+                    pbTasks.Value++;
+                     pbPenalties.Value = practicer.PenaltiesCount;
                 } else {
+                    pbTasks.Value++;
                     lbRefine.Content += " " + practicer.CurrentTask.getName();
-                    practicer.savePenalty(3); // adds penality: failed task +3 more
-                    practicer.savePenalty(3); // 
-                    practicer.savePenalty(3); // 
+                    if(pbPenalties.Maximum - pbPenalties.Value >= 3) {
+                        // save the penality and update the penality bar
+                        pbPenalties.Value = practicer.savePenalty(2); // adds penality: failed task +3 more;
+                    }
                 }//ei
 
                 if(practicer.nextScramble()) {// go next guess
@@ -205,9 +208,8 @@ namespace TwoSidePLL {
         public bool verify(char ch) {
             return CurrentTask != null && CurrentTask.getName()[0] == ch.ToString().ToUpper()[0];
         }
-        public void savePenalty(int deceptiveTasksCount) {
+        public int savePenalty(int deceptiveTasksCount) {
             penalties.Enqueue(CurrentTask);
-
             for(/**/; deceptiveTasksCount > 0; deceptiveTasksCount--) {
                 Task nextTask = generateRandomTask(
                       form.getSelectedScrambles()
@@ -216,6 +218,7 @@ namespace TwoSidePLL {
                 );
                 penalties.Enqueue(nextTask);
             }//for
+            return penalties.Count;
         }
     }//cl
     
@@ -406,9 +409,11 @@ namespace TwoSidePLL {
             set {
                 if(value) {
                     watch = Stopwatch.StartNew();
-                    form.pbCorrectAnswers.Minimum = 0;
-                    form.pbCorrectAnswers.Maximum = TasksCount + 1;
-                    form.pbCorrectAnswers.Value = 0;
+                    form.pbTasks.Minimum = 0;
+                    form.pbTasks.Maximum = TasksCount + 1;
+                    form.pbTasks.Value = 0;
+
+                    form.pbPenalties.Value = 0;
                 } else {
                     watch.Stop();
                     string answer = string.Format("{0:D2}m:{1:D2}s:{2:D3}ms",
@@ -467,11 +472,12 @@ namespace TwoSidePLL {
                 form.cbOrange.IsEnabled = !value;
                 form.cbBlue.IsEnabled = !value;
 
-                form.pbCorrectAnswers.Value = 0;
+                form.pbTasks.Value = 0;
                 form.lbRefine.Content = "";
             }
         }
         public int TasksCount { get { return tasks.Count;  } }
+        public int PenaltiesCount { get { return penalties.Count;  } }
         Task generateRandomTask(List<string> selectedPcases, List<string> selectedViews, List<Side> selectedTotops) {
             if(selectedPcases.Count == 0 || selectedViews.Count == 0 || selectedTotops.Count == 0) 
                 return null;

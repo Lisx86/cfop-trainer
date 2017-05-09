@@ -199,7 +199,7 @@
                 </CheckBox>
             </Grid>
         </GroupBox>
-        <ProgressBar HorizontalAlignment="Left" Margin="12,0,0,12" Name="pbCorrectAnswers" Width="351" Value="45" Height="25" VerticalAlignment="Bottom" />
+        <ProgressBar HorizontalAlignment="Left" Margin="12,0,0,12" Name="pbTasks" Width="395" Value="45" Height="25" VerticalAlignment="Bottom" />
         <Button Content="Start" Height="36" HorizontalAlignment="Left" Margin="556,518,0,0" Name="btStart" VerticalAlignment="Top" Width="218" FontSize="20" Click="click_startPractice" />
         <ComboBox Height="36" Margin="681,476,0,0" Name="comPracticeSize" VerticalAlignment="Top" SelectedIndex="3" FontSize="20" HorizontalAlignment="Left" Width="93">
             <ComboBoxItem Content="10" />
@@ -281,7 +281,8 @@
             </Grid>
         </GroupBox>
         <Label Content="Correct answers:" Height="31" HorizontalAlignment="Left" Margin="11,585,0,0" Name="pluser" VerticalAlignment="Top" FontSize="14" Width="133" />
-        <Label Content="Refine:" FontSize="14" Height="31" HorizontalAlignment="Left" Margin="368,585,0,0" Name="label1" VerticalAlignment="Top" Width="133" />
-        <Label HorizontalAlignment="Left" Margin="384,0,0,8" Name="lbRefine" Width="585" FontSize="20" FontWeight="Bold" Foreground="#FFFC7E7E" Height="36" VerticalAlignment="Bottom" Content="vasea" />
+        <Label HorizontalAlignment="Left" Margin="493,0,0,36" Name="lbRefine" Width="296" FontSize="20" FontWeight="Bold" Foreground="#FFFC7E7E" Height="36" VerticalAlignment="Bottom" Content="vasea" />
+        <ProgressBar Height="25" HorizontalAlignment="Left" Margin="424,0,0,12" Name="pbPenalties" Value="1" VerticalAlignment="Bottom" Width="342" Foreground="Red" Maximum="50" />
+        <Label Content="Penalties:" FontSize="14" Height="31" HorizontalAlignment="Left" Margin="424,584,0,0" Name="label1" VerticalAlignment="Top" Width="75" />
     </Grid>
 </Window>
