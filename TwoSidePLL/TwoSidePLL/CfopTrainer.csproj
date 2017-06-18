@@ -8,8 +8,8 @@
     <ProjectGuid>{15A94B2F-D2A7-454F-9369-4F276F5F509A}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TwoSidePLL</RootNamespace>
-    <AssemblyName>TwoSidePLL</AssemblyName>
+    <RootNamespace>CfopTrainer</RootNamespace>
+    <AssemblyName>CfopTrainer</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -59,8 +59,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Common.cs" />
-    <Compile Include="Scrambler.cs" />
-    <Compile Include="Sticker.cs" />
+    <Compile Include="Permute.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -101,9 +100,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\cube-template.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\1497822694_api.ico" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="1497822694_api.ico" />

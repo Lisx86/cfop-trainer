@@ -13,7 +13,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Diagnostics;
 
-namespace TwoSidePLL { 
+namespace CfopTrainer { 
     public partial class MainWindow : Window {
         Cube theCube;
         Practicer practicer;

@@ -5,23 +5,13 @@ using System.Text;
 using System.Windows;
 using System.Windows.Media;
 
-namespace TwoSidePLL
-{
-    enum Side
-    {
+namespace CfopTrainer {
+    enum Side {
         Left
         , Front
         , Right
         , Back
         , Up
         , Down
-    }
-
-    class Sticker
-    {
-        
-        public Sticker(Color color)
-        {
-        }
     }
 }

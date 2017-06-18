@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace TwoSidePLL
+namespace CfopTrainer
 {
     class PLLManager {
         Dictionary<string/*taskName*/, string/*task command*/> taskMap = new Dictionary<string, string>();

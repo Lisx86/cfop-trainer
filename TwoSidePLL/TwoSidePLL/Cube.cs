@@ -5,7 +5,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Media;
 
-namespace TwoSidePLL
+namespace CfopTrainer
 {
     class Cube: Object{
         // there are 6 lists with 9 stickers each
