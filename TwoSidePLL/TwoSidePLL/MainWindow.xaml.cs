@@ -123,106 +123,11 @@ namespace CfopTrainer {
             theCube.resetStickers(Side.Up);
             updateGui();
         }
+        private void button1_Click(object sender, RoutedEventArgs e)
+        {
 
-    }//cl
+        }
 
-    class Task : Pcase {
-        Side totopSide;
-        string auf;
-        string f2lauf;
-        public Task(string name, string todo, Side totopSide, string auf = "", string f2lauf = "")
-        : base(name, todo) {
-            this.totopSide = totopSide;
-            this.auf = auf;
-            this.f2lauf = f2lauf;
-        }
-        public override string getTodo() {
-            return base.getTodo() + " " + auf + " " + f2lauf;
-        }
-        public Side getTotopSide() {
-            return totopSide;
-        }
-    }
-
-    partial class Practicer {
-        Random random = new Random();
-        Cube cube;
-        PLLManager pllman = new PLLManager();
-        Queue<Task> tasks     = new Queue<Task>();
-        Queue<Task> penalties = new Queue<Task>();
-        public Task CurrentTask { get; set; }
-
-        public Practicer(MainWindow form, Cube cube) {
-            this.form = form;
-            this.cube = cube;
-        }
-        public void newPractice(int tasksToEnque) {
-              for(/**/; tasksToEnque > 0; tasksToEnque--) {
-                Task nextTask = generateRandomTask(
-                      form.getSelectedScrambles()
-                    , form.getSelectedViews()
-                    , form.getSelectedTotops()
-                );
-                if(nextTask != null) 
-                    tasks.Enqueue(nextTask);
-            }//for
-        }
-        public void newPracticeAllcased() { // generate new set of tasks
-            var selectedTotops = form.getSelectedTotops();
-            int colIndx = random.Next(0, selectedTotops.Count);
-            Side totopSide = selectedTotops.Count > 0 ? selectedTotops[colIndx] : Side.Up; // up by default
-
-            List<Task> orderedTasks = new List<Task>();
-            foreach(var selPcaseName in form.getSelectedScrambles()) {
-                foreach(var selView in form.getSelectedViews()) {
-                    Task nextTask = new Task(
-                          selPcaseName
-                        , pllman.getTaskCommand(selPcaseName)
-                        , totopSide
-                        , selView
-                        , ""
-                    );
-                    orderedTasks.Add(nextTask);
-                }//for
-            }//for
-
-            // randomize the tasks
-            while(orderedTasks.Count > 0) {
-                var randIndex = random.Next(0, orderedTasks.Count);
-                tasks.Enqueue( orderedTasks[randIndex] );
-                orderedTasks.RemoveAt(randIndex);
-            }
-        }
-        public bool nextScramble() {            
-            CurrentTask =        tasks.Count > 0 ? tasks.Dequeue() 
-                           : penalties.Count > 0 ? penalties.Dequeue()
-                           : null;
-            
-            if (CurrentTask != null) {                             // check if got any tasks
-                cube.resetStickers( CurrentTask.getTotopSide() );  // prepare the cube
-                cube.execute( CurrentTask.getTodo() );             // rotate the cube
-                return true; // got a task
-            }
-            return false; // got no more tasks
-        }
-        public bool verify(char ch) {
-            return CurrentTask != null && CurrentTask.getName()[0] == ch.ToString().ToUpper()[0];
-        }
-        public int savePenalty(int deceptiveTasksCount) {
-            penalties.Enqueue(CurrentTask);
-            for(/**/; deceptiveTasksCount > 0; deceptiveTasksCount--) {
-                Task nextTask = generateRandomTask(
-                      form.getSelectedScrambles()
-                    , form.getSelectedViews()
-                    , new List<Side>(){ CurrentTask.getTotopSide() }
-                );
-                penalties.Enqueue(nextTask);
-            }//for
-            return penalties.Count;
-        }
-    }//cl
-    
-    public partial class MainWindow : Window {
         Dictionary<Side, List<Polygon>> uiData;
         Dictionary<Side, List<Rectangle>> uiBackView;
         List<CheckBox> scrambles = new List<CheckBox>(); // i think it should be a part of practicer
@@ -369,17 +274,13 @@ namespace CfopTrainer {
         }
         private void updateGui() {
             Dictionary<Side, List<Color>> cubeData = theCube.getData();
-            foreach (Side side in Enum.GetValues(typeof(Side)))
-            {
-                switch (side)
-                {
+            foreach (Side side in Enum.GetValues(typeof(Side))) {
+                switch (side) {
                     case Side.Up:
                     case Side.Front:
                     case Side.Right:
-                        if (cubeData[side].Count == uiData[side].Count)
-                        {
-                            for (int counter = 0; counter < cubeData[side].Count; counter++)
-                            {
+                        if (cubeData[side].Count == uiData[side].Count){
+                            for (int counter = 0; counter < cubeData[side].Count; counter++) {
                                 uiData[side][counter].Fill = new SolidColorBrush(cubeData[side][counter]);
                             }
                         }
@@ -387,19 +288,112 @@ namespace CfopTrainer {
                     case Side.Left:
                     case Side.Back:
                     case Side.Down:
-                        if (cubeData[side].Count == uiBackView[side].Count)
-                        {
-                            for (int counter = 0; counter < cubeData[side].Count; counter++)
-                            {
+                        if (cubeData[side].Count == uiBackView[side].Count) {
+                            for (int counter = 0; counter < cubeData[side].Count; counter++){
                                 uiBackView[side][counter].Fill = new SolidColorBrush(cubeData[side][counter]);
                             }
                         }
                         break;
                 }//sw
             }//for          
+        }//fn
+    }//cl
+
+    class Task : Pcase {
+        Side totopSide;
+        string auf;
+        string f2lauf;
+        public Task(string name, string todo, Side totopSide, string auf = "", string f2lauf = "")
+        : base(name, todo) {
+            this.totopSide = totopSide;
+            this.auf = auf;
+            this.f2lauf = f2lauf;
+        }
+        public override string getTodo() {
+            return base.getTodo() + " " + auf + " " + f2lauf;
+        }
+        public Side getTotopSide() {
+            return totopSide;
         }
     }
+
     partial class Practicer {
+        Random random = new Random();
+        Cube cube;
+        PLLManager pllman = new PLLManager();
+        Queue<Task> tasks     = new Queue<Task>();
+        Queue<Task> penalties = new Queue<Task>();
+        public Task CurrentTask { get; set; }
+
+        public Practicer(MainWindow form, Cube cube) {
+            this.form = form;
+            this.cube = cube;
+        }
+        public void newPractice(int tasksToEnque) {
+              for(/**/; tasksToEnque > 0; tasksToEnque--) {
+                Task nextTask = generateRandomTask(
+                      form.getSelectedScrambles()
+                    , form.getSelectedViews()
+                    , form.getSelectedTotops()
+                );
+                if(nextTask != null) 
+                    tasks.Enqueue(nextTask);
+            }//for
+        }
+        public void newPracticeAllcased() { // generate new set of tasks
+            var selectedTotops = form.getSelectedTotops();
+            int colIndx = random.Next(0, selectedTotops.Count);
+            Side totopSide = selectedTotops.Count > 0 ? selectedTotops[colIndx] : Side.Up; // up by default
+
+            List<Task> orderedTasks = new List<Task>();
+            foreach(var selPcaseName in form.getSelectedScrambles()) {
+                foreach(var selView in form.getSelectedViews()) {
+                    Task nextTask = new Task(
+                          selPcaseName
+                        , pllman.getTaskCommand(selPcaseName)
+                        , totopSide
+                        , selView
+                        , ""
+                    );
+                    orderedTasks.Add(nextTask);
+                }//for
+            }//for
+
+            // randomize the tasks
+            while(orderedTasks.Count > 0) {
+                var randIndex = random.Next(0, orderedTasks.Count);
+                tasks.Enqueue( orderedTasks[randIndex] );
+                orderedTasks.RemoveAt(randIndex);
+            }
+        }
+        public bool nextScramble() {            
+            CurrentTask =        tasks.Count > 0 ? tasks.Dequeue() 
+                           : penalties.Count > 0 ? penalties.Dequeue()
+                           : null;
+            
+            if (CurrentTask != null) {                             // check if got any tasks
+                cube.resetStickers( CurrentTask.getTotopSide() );  // prepare the cube
+                cube.execute( CurrentTask.getTodo() );             // rotate the cube
+                return true; // got a task
+            }
+            return false; // got no more tasks
+        }
+        public bool verify(char ch) {
+            return CurrentTask != null && CurrentTask.getName()[0] == ch.ToString().ToUpper()[0];
+        }
+        public int savePenalty(int deceptiveTasksCount) {
+            penalties.Enqueue(CurrentTask);
+            for(/**/; deceptiveTasksCount > 0; deceptiveTasksCount--) {
+                Task nextTask = generateRandomTask(
+                      form.getSelectedScrambles()
+                    , form.getSelectedViews()
+                    , new List<Side>(){ CurrentTask.getTotopSide() }
+                );
+                penalties.Enqueue(nextTask);
+            }//for
+            return penalties.Count;
+        }
+
         MainWindow form; // temporary. must use a delegate
         Stopwatch watch = Stopwatch.StartNew();
         bool m_running = false;
@@ -503,5 +497,5 @@ namespace CfopTrainer {
             // create the task instance and enqueue it
             return new Task(randomCaseName, pllman.getTaskCommand(randomCaseName), totopSide, auf, auf2l);
         }
-    }
+    }//cl
 }//ns

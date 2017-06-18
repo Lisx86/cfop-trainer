@@ -58,8 +58,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Common.cs" />
-    <Compile Include="Permute.cs" />
+    <Compile Include="BusinnessLogic\Common.cs" />
+    <Compile Include="BusinnessLogic\Phases\First2Layers.cs" />
+    <Compile Include="BusinnessLogic\Phases\Permute.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -68,7 +69,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Cube.cs" />
+    <Compile Include="BusinnessLogic\Cube.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
