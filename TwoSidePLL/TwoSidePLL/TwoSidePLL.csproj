@@ -36,7 +36,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>1492650885_Cube.ico</ApplicationIcon>
+    <ApplicationIcon>1497822694_api.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -103,7 +103,10 @@
     <Resource Include="Images\cube-template.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="1492650885_Cube.ico" />
+    <Resource Include="Images\1497822694_api.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="1497822694_api.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
