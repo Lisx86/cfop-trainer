@@ -41,7 +41,7 @@
         <Label Content="Correct answers:" HorizontalAlignment="Left" Margin="11,0,0,34" Name="pluser" FontSize="14" Width="133" Height="31" VerticalAlignment="Bottom" />
         <Label HorizontalAlignment="Left" Margin="493,0,0,36" Name="lbRefine" Width="296" FontSize="20" FontWeight="Bold" Foreground="#FFFC7E7E" Height="36" VerticalAlignment="Bottom" Content="vasea" />
         <ProgressBar Height="25" HorizontalAlignment="Left" Margin="424,0,0,12" Name="pbPenalties" Value="1" VerticalAlignment="Bottom" Width="312" Foreground="Red" Maximum="50" />
-        <Label Content="Penalties:" FontSize="14" HorizontalAlignment="Left" Margin="424,0,0,35" Name="label1" Width="75" Height="31" VerticalAlignment="Bottom" />
+        <Label Content="Penalties:" FontSize="14" Margin="424,0,0,35" Name="label1" Height="31" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="75" />
         <TabControl Margin="0,0,37,54" Name="tabControl1" Background="{x:Null}" BorderBrush="{x:Null}" Height="537" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="437">
             <TabItem Header="Free run" Name="tabFree">
                 <Grid Background="{x:Null}" OpacityMask="{x:Null}">

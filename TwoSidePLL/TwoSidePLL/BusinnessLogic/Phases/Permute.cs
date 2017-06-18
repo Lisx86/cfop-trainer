@@ -2,11 +2,30 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Diagnostics; // Stopwatch
 
 namespace CfopTrainer {
-    class PLLManager {
-        Dictionary<string/*taskName*/, string/*task command*/> taskMap = new Dictionary<string, string>();
-        public PLLManager() {
+    using CheckedPLLcases = List<string>;
+    using CheckedViews    = List<string>;
+    using CheckedTotops   = List<Side>;
+    using TaskSpeciesMap = Dictionary<string/*Pll case name to execute*/, string/*Command for creating the pll case from clean cube*/>;
+
+    class PLLManager: Practicer {
+        TaskSpeciesMap taskMap   = new TaskSpeciesMap();
+        Queue<PLLTask> tasks     = new Queue<PLLTask>();
+        Queue<PLLTask> penalties = new Queue<PLLTask>();
+        public PLLTask CurrentTask { get; set; }
+
+        CheckedPLLcases checkedPllCases;
+        CheckedViews    checkedViews;
+        CheckedTotops   checkedTotops;
+        bool turn_f2l;
+        
+        public PLLManager(Cube cube, CheckedPLLcases cases, CheckedViews views, CheckedTotops totops, bool f2auf):base(cube) {
+            checkedPllCases = cases;
+            checkedViews    = views;
+            checkedTotops   = totops;
+            turn_f2l        = f2auf;
             taskMap["H"]  = "L F2 R2 F2 L' R' U2 R' B F' U2 B' F";
             taskMap["Ua"] = "R2 B2 U B2 U' B2 F2 D B2 D' F2 R2";
             taskMap["Ub"] = "L2 B R2 B' F D2 F U F2 L2 B2 D B2";
@@ -31,6 +50,121 @@ namespace CfopTrainer {
         }
         public string getTaskCommand(string taskName) {
             return taskMap[taskName];
+        }
+ 
+        public void newPractice(int tasksToEnque) {
+              for(/**/; tasksToEnque > 0; tasksToEnque--) {
+                PLLTask nextTask = generateRandomTask(checkedPllCases, checkedViews, checkedTotops);
+                if(nextTask != null) 
+                    tasks.Enqueue(nextTask);
+            }//for
+        }
+        public void newPracticeAllcased() { // generate new set of tasks
+            int colIndx = random.Next(0, checkedTotops.Count);
+            Side totopSide = checkedTotops.Count > 0 ? checkedTotops[colIndx] : Side.Up; // up by default
+
+            List<PLLTask> orderedTasks = new List<PLLTask>();
+            foreach(var selPcaseName in checkedPllCases) {
+                foreach(var selView in checkedViews) {
+                    PLLTask nextTask = new PLLTask(
+                          selPcaseName
+                        , getTaskCommand(selPcaseName)
+                        , totopSide
+                        , selView
+                        , ""
+                    );
+                    orderedTasks.Add(nextTask);
+                }//for
+            }//for
+
+            // randomize the tasks
+            while(orderedTasks.Count > 0) {
+                var randIndex = random.Next(0, orderedTasks.Count);
+                tasks.Enqueue( orderedTasks[randIndex] );
+                orderedTasks.RemoveAt(randIndex);
+            }
+        }
+        public bool nextScramble() {            
+            CurrentTask =        tasks.Count > 0 ? tasks.Dequeue() 
+                           : penalties.Count > 0 ? penalties.Dequeue()
+                           : null;
+            
+            // TODO: is it ok?
+            if (CurrentTask != null) {                             // check if got any tasks
+                cube.resetStickers( CurrentTask.getTotopSide() );  // reset the stickers & orient the cube accordingly
+                cube.execute( CurrentTask.getTodo() );             // perform the algorithm which creates the pll-case from solved cube
+                
+                // have a new task!
+                return true; 
+            }//if
+
+            // got no more tasks
+            return false; 
+        }
+        public bool verify(char ch) {
+            return CurrentTask != null && CurrentTask.getName()[0] == ch.ToString().ToUpper()[0];
+        }
+        public int savePenalty(int deceptiveTasksCount) {
+            // Enqueue the penalty
+            penalties.Enqueue(CurrentTask);
+
+            // It would be too simple just to practice the hard case
+            // So here are several more guesses for deceptive purposes :)
+            for(/**/; deceptiveTasksCount > 0; deceptiveTasksCount--) {
+                PLLTask nextTask = generateRandomTask(
+                      checkedPllCases                                // generate new random pll case from selections
+                    , checkedViews                                   // generate new random view
+                    , new List<Side>(){ CurrentTask.getTotopSide() } // Let's use the same top color as the original task had
+                );
+                penalties.Enqueue(nextTask);
+            }//for
+            return penalties.Count;
+        }
+
+        bool m_running = false;
+        public string LastRun {get; set;}
+        public bool Running {
+            get { return m_running; }
+            set {
+                if(value) {
+                    watch = Stopwatch.StartNew();
+
+                } else {
+                    watch.Stop();
+                    LastRun = string.Format("{0:D2}m:{1:D2}s:{2:D3}ms",
+                                            watch.Elapsed.Minutes,
+                                            watch.Elapsed.Seconds,
+                                            watch.Elapsed.Milliseconds);
+                }//ei
+                m_running = value;
+            }//set
+        }
+        public int TasksCount { get { return tasks.Count;  } }
+        public int PenaltiesCount { get { return penalties.Count;  } }
+        PLLTask generateRandomTask(List<string> selectedPcases, List<string> selectedViews, List<Side> selectedTotops) {
+            if(selectedPcases.Count == 0 || selectedViews.Count == 0 || selectedTotops.Count == 0) 
+                return null;
+
+            //AUF/AUF part             
+            int aufIndx = random.Next(0, selectedViews.Count);
+            string auf = " " + selectedViews[aufIndx]; // AUF
+
+            // F2l-AUF is fixed 4 rotations max
+            string auf2l = "";
+            for(aufIndx = random.Next(0, 4); turn_f2l && aufIndx > 0; aufIndx--) {
+                auf2l += " d"; // add 0..3 turnd of 'd'
+            }//for
+
+            // Totopside
+            int colIndx = random.Next(0, selectedTotops.Count);
+            Side totopSide = selectedTotops[colIndx];
+
+            // select the concrete PLL-case which has to be performed: (Aa, Z, Jb, Ra, Y, Nb, ...)
+            int randomIndex = random.Next(0, selectedPcases.Count);
+            string randomCaseName = selectedPcases[randomIndex];
+
+            // create the task instance and enqueue it
+            return new PLLTask(randomCaseName, getTaskCommand(randomCaseName), totopSide, auf, auf2l);
         }
     }//cl
 

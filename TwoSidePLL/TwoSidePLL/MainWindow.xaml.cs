@@ -11,15 +11,66 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Diagnostics;
 
 namespace CfopTrainer { 
     public partial class MainWindow : Window {
-        Cube theCube;        // the heart of the program
-        Practicer practicer; // cube manager
+        Cube theCube;                                    // the heart of the program
+        PLLManager practicer;                            // Pll practice manager
         Dictionary<Side, List<Polygon>>   uiData;        // Visible stickers set
         Dictionary<Side, List<Rectangle>> uiBackView;    // Invisible stickers set
 
+        bool ControlsEnabled{ 
+            set {
+                cbCorrect.IsEnabled   = !value;
+                cbDiagonal.IsEnabled  = !value;
+                cbAdjacent.IsEnabled  = !value;
+                cbView.IsEnabled      = !value;
+                cbTopcolors.IsEnabled = !value;
+
+                btStart.IsEnabled         = !value;
+                comPracticeSize.IsEnabled = !value;
+                tbMovesTodo.IsEnabled     = !value;
+                btReset.IsEnabled         = !value;
+                btExecute.IsEnabled       = !value;
+
+                cbH.IsEnabled  = !value;
+                cbUa.IsEnabled = !value;
+                cbUb.IsEnabled = !value;
+                cbZ.IsEnabled  = !value;
+
+                cbV.IsEnabled  = !value;
+                cbY.IsEnabled  = !value;
+                cbNa.IsEnabled = !value;
+                cbNb.IsEnabled = !value;
+                cbE.IsEnabled  = !value;
+
+                cbGa.IsEnabled = !value;
+                cbGb.IsEnabled = !value;
+                cbGc.IsEnabled = !value;
+                cbGd.IsEnabled = !value;
+                cbAa.IsEnabled = !value;
+                cbAb.IsEnabled = !value;
+                cbT.IsEnabled  = !value;
+                cbJa.IsEnabled = !value;
+                cbJb.IsEnabled = !value;
+                cbRa.IsEnabled = !value;
+                cbRb.IsEnabled = !value;
+                cbF.IsEnabled  = !value;
+
+                cbLeft.IsEnabled   = !value;
+                cbRight.IsEnabled  = !value;
+                cbFace.IsEnabled   = !value;
+                cbBack.IsEnabled   = !value;
+                cbF2Lauf.IsEnabled = !value;
+
+                cbYellow.IsEnabled = !value;
+                cbWhite.IsEnabled  = !value;
+                cbRed.IsEnabled    = !value;
+                cbGreen.IsEnabled  = !value;
+                cbOrange.IsEnabled = !value;
+                cbBlue.IsEnabled   = !value;
+            }
+        }
         public MainWindow() {
             InitializeComponent();
 
@@ -88,14 +139,12 @@ namespace CfopTrainer {
             uiBackView[Side.Down].Add(down6);
             uiBackView[Side.Down].Add(down7);
             uiBackView[Side.Down].Add(down8);
-
             theCube = new Cube();
-            practicer = new Practicer(this, theCube);
             updateGui();
         }
 
         // Transform checkboxes values into simple string lists
-        internal List<string/*caseName*/> getCheckedPLLcases() {
+        internal List<string> getCheckedPLLcases() {
             var checkbs = new List<CheckBox>(){cbH, cbUa, cbUb, cbZ, cbV, cbY, cbNa, cbNb, cbE, cbGa, cbGb, cbGc, cbGd, cbAa, cbAb, cbT, cbJa, cbJb, cbRa, cbRb, cbF};
             var ret     = new List<string>();
             foreach(CheckBox cb in checkbs) {
@@ -105,7 +154,7 @@ namespace CfopTrainer {
             }//for
             return ret;
         }
-        internal List<string/*AUF*/>      getSelectedViews() {
+        internal List<string> getCheckedViews() {
             var views = new Dictionary<CheckBox, string/*AUF*/>(); // checkboxes-keys, tied to AUF-command strings
             views[cbFace]  = "";   //  0U noop   // TODO: these strings should perhaps be defined somewhere out of UI logic
             views[cbRight] = "U";  //  1U
@@ -122,7 +171,7 @@ namespace CfopTrainer {
             }//for
             return ret;
         }
-        internal List<Side>               getSelectedTotops() {
+        internal List<Side>   getCheckedTotops() {
             var totops = new Dictionary<CheckBox, Side>(); // specific colors tied to the side were they must be turned
             totops.Add(cbYellow, Side.Up);
             totops.Add(cbWhite,  Side.Down);
@@ -170,17 +219,39 @@ namespace CfopTrainer {
         
         // Direct user interaction methods
         private void click_startPractice(object sender, RoutedEventArgs e) {
+            if(practicer != null)
+                return; // TODO: maybe a messagebox or something....
+
+            // create new practicer instance
+            // pass the selections to the practicer
+            practicer = new PLLManager(theCube, getCheckedPLLcases(), getCheckedViews(), getCheckedTotops(), cbF2Lauf.IsChecked.Value);
+
+            // decide the practice type in dependence of COMBO selection
             string selectedText = (comPracticeSize.SelectedItem as ComboBoxItem).Content.ToString();
             if (selectedText.Length > 3)
+                // Practice all PLL cases 
                 practicer.newPracticeAllcased();
-            else //                        practice length
+            else
+                // Practice only the selected cases, pass the combo value as GUESSING TIMES LIMIT
                 practicer.newPractice( Convert.ToInt32(selectedText) );
 
             // generate next scramble
             if (practicer.nextScramble()) {
-                updateGui();                // show it
-                practicer.Running = true;   // disable controls while guessing
-            }
+                // show the cube
+                updateGui();
+                
+                // prepare progress bars and labels
+                pbTasks.Minimum = 0;
+                pbTasks.Maximum = practicer.TasksCount + 1;
+                pbTasks.Value = 0;
+                pbPenalties.Value = 0;
+                pbTasks.Value = 0;
+                lbRefine.Content = "";
+
+                // Go!
+                practicer.Running = true;
+                ControlsEnabled   = false; // disable controls while guessing
+            }//if
         }
         private void keyDown(object sender, KeyEventArgs e) {
             
@@ -204,6 +275,9 @@ namespace CfopTrainer {
                     updateGui();               // show it
                 } else {
                     practicer.Running = false;
+                    ControlsEnabled   = true; // enable back the controls
+                    Title = practicer.LastRun;
+
                 }//ei
             }//if
         }
@@ -266,191 +340,6 @@ namespace CfopTrainer {
         private void button1_Click(object sender, RoutedEventArgs e)
         {
 
-        }
-    }//cl
-
-
-
-    partial class Practicer {
-        Random random = new Random();
-        Cube cube;
-        PLLManager pllman = new PLLManager();
-        Queue<PLLTask> tasks     = new Queue<PLLTask>();
-        Queue<PLLTask> penalties = new Queue<PLLTask>();
-        public PLLTask CurrentTask { get; set; }
-
-        MainWindow form; // temporary. must use a delegate
-        Stopwatch watch = Stopwatch.StartNew();
-
-        public Practicer(MainWindow form, Cube cube) {
-            this.form = form;
-            this.cube = cube;
-        }
-        public void newPractice(int tasksToEnque) {
-              for(/**/; tasksToEnque > 0; tasksToEnque--) {
-                PLLTask nextTask = generateRandomTask(
-                      form.getCheckedPLLcases()
-                    , form.getSelectedViews()
-                    , form.getSelectedTotops()
-                );
-                if(nextTask != null) 
-                    tasks.Enqueue(nextTask);
-            }//for
-        }
-        public void newPracticeAllcased() { // generate new set of tasks
-            var selectedTotops = form.getSelectedTotops();
-            int colIndx = random.Next(0, selectedTotops.Count);
-            Side totopSide = selectedTotops.Count > 0 ? selectedTotops[colIndx] : Side.Up; // up by default
-
-            List<PLLTask> orderedTasks = new List<PLLTask>();
-            foreach(var selPcaseName in form.getCheckedPLLcases()) {
-                foreach(var selView in form.getSelectedViews()) {
-                    PLLTask nextTask = new PLLTask(
-                          selPcaseName
-                        , pllman.getTaskCommand(selPcaseName)
-                        , totopSide
-                        , selView
-                        , ""
-                    );
-                    orderedTasks.Add(nextTask);
-                }//for
-            }//for
-
-            // randomize the tasks
-            while(orderedTasks.Count > 0) {
-                var randIndex = random.Next(0, orderedTasks.Count);
-                tasks.Enqueue( orderedTasks[randIndex] );
-                orderedTasks.RemoveAt(randIndex);
-            }
-        }
-        public bool nextScramble() {            
-            CurrentTask =        tasks.Count > 0 ? tasks.Dequeue() 
-                           : penalties.Count > 0 ? penalties.Dequeue()
-                           : null;
-            
-            if (CurrentTask != null) {                             // check if got any tasks
-                cube.resetStickers( CurrentTask.getTotopSide() );  // prepare the cube
-                cube.execute( CurrentTask.getTodo() );             // rotate the cube
-                return true; // got a task
-            }
-            return false; // got no more tasks
-        }
-        public bool verify(char ch) {
-            return CurrentTask != null && CurrentTask.getName()[0] == ch.ToString().ToUpper()[0];
-        }
-        public int savePenalty(int deceptiveTasksCount) {
-            penalties.Enqueue(CurrentTask);
-            for(/**/; deceptiveTasksCount > 0; deceptiveTasksCount--) {
-                PLLTask nextTask = generateRandomTask(
-                      form.getCheckedPLLcases()
-                    , form.getSelectedViews()
-                    , new List<Side>(){ CurrentTask.getTotopSide() }
-                );
-                penalties.Enqueue(nextTask);
-            }//for
-            return penalties.Count;
-        }
-
-        bool m_running = false;
-        public bool Running
-        {
-            get { return m_running; }
-            set {
-                if(value) {
-                    watch = Stopwatch.StartNew();
-                    form.pbTasks.Minimum = 0;
-                    form.pbTasks.Maximum = TasksCount + 1;
-                    form.pbTasks.Value = 0;
-
-                    form.pbPenalties.Value = 0;
-                } else {
-                    watch.Stop();
-                    string answer = string.Format("{0:D2}m:{1:D2}s:{2:D3}ms",
-                                            watch.Elapsed.Minutes,
-                                            watch.Elapsed.Seconds,
-                                            watch.Elapsed.Milliseconds);
-                    form.Title = answer;
-                }
-                m_running = value;
-                form.cbCorrect.IsEnabled = !value;
-                form.cbDiagonal.IsEnabled = !value;
-                form.cbAdjacent.IsEnabled = !value;
-                form.cbView.IsEnabled = !value;
-                form.cbTopcolors.IsEnabled = !value;
-
-                form.btStart.IsEnabled = !value;
-                form.comPracticeSize.IsEnabled = !value;
-                form.tbMovesTodo.IsEnabled = !value;
-                form.btReset.IsEnabled = !value;
-                form.btExecute.IsEnabled = !value;
-
-                form.cbH.IsEnabled = !value;
-                form.cbUa.IsEnabled = !value;
-                form.cbUb.IsEnabled = !value;
-                form.cbZ.IsEnabled = !value;
-
-                form.cbV.IsEnabled = !value;
-                form.cbY.IsEnabled = !value;
-                form.cbNa.IsEnabled = !value;
-                form.cbNb.IsEnabled = !value;
-                form.cbE.IsEnabled = !value;
-
-                form.cbGa.IsEnabled = !value;
-                form.cbGb.IsEnabled = !value;
-                form.cbGc.IsEnabled = !value;
-                form.cbGd.IsEnabled = !value;
-                form.cbAa.IsEnabled = !value;
-                form.cbAb.IsEnabled = !value;
-                form.cbT.IsEnabled = !value;
-                form.cbJa.IsEnabled = !value;
-                form.cbJb.IsEnabled = !value;
-                form.cbRa.IsEnabled = !value;
-                form.cbRb.IsEnabled = !value;
-                form.cbF.IsEnabled = !value;
-
-                form.cbLeft.IsEnabled = !value;
-                form.cbRight.IsEnabled = !value;
-                form.cbFace.IsEnabled = !value;
-                form.cbBack.IsEnabled = !value;
-                form.cbF2Lauf.IsEnabled = !value;
-
-                form.cbYellow.IsEnabled = !value;
-                form.cbWhite.IsEnabled = !value;
-                form.cbRed.IsEnabled = !value;
-                form.cbGreen.IsEnabled = !value;
-                form.cbOrange.IsEnabled = !value;
-                form.cbBlue.IsEnabled = !value;
-
-                form.pbTasks.Value = 0;
-                form.lbRefine.Content = "";
-            }
-        }
-        public int TasksCount { get { return tasks.Count;  } }
-        public int PenaltiesCount { get { return penalties.Count;  } }
-        PLLTask generateRandomTask(List<string> selectedPcases, List<string> selectedViews, List<Side> selectedTotops) {
-            if(selectedPcases.Count == 0 || selectedViews.Count == 0 || selectedTotops.Count == 0) 
-                return null;
-
-            //AUF/AUF part             
-            int aufIndx = random.Next(0, selectedViews.Count);
-            string auf = " " + selectedViews[aufIndx]; // AUF
-
-            // F2l-AUF is fixed 4 rotations max
-            string auf2l = "";
-            for(aufIndx = random.Next(0, 4); form.cbF2Lauf.IsChecked.Value && aufIndx > 0; aufIndx--) {
-                auf2l += " d"; // add 0..3 turnd of 'd'
-            }//for
-
-            // Totopside
-            int colIndx = random.Next(0, selectedTotops.Count);
-            Side totopSide = selectedTotops[colIndx];
-
-            // select the concrete PLL-case which has to be performed: (Aa, Z, Jb, Ra, Y, Nb, ...)
-            int randomIndex = random.Next(0, selectedPcases.Count);
-            string randomCaseName = selectedPcases[randomIndex];
-
-            // create the task instance and enqueue it
-            return new PLLTask(randomCaseName, pllman.getTaskCommand(randomCaseName), totopSide, auf, auf2l);
         }
     }//cl
 }//ns
