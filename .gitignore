@@ -1,0 +1,4 @@
+*.sln
+
+TwoSidePLL/TwoSidePLL/bin/*
+TwoSidePLL/TwoSidePLL/obj/*
