@@ -54,7 +54,7 @@ namespace CfopTrainer {
  
         public void newPractice(int tasksToEnque) {
               for(/**/; tasksToEnque > 0; tasksToEnque--) {
-                PLLTask nextTask = generateRandomTask(checkedPllCases, checkedViews, checkedTotops);
+                PLLTask nextTask = generateRandomTask();
                 if(nextTask != null) 
                     tasks.Enqueue(nextTask);
             }//for
@@ -111,11 +111,9 @@ namespace CfopTrainer {
             // It would be too simple just to practice the hard case
             // So here are several more guesses for deceptive purposes :)
             for(/**/; deceptiveTasksCount > 0; deceptiveTasksCount--) {
-                PLLTask nextTask = generateRandomTask(
-                      checkedPllCases                                // generate new random pll case from selections
-                    , checkedViews                                   // generate new random view
-                    , new List<Side>(){ CurrentTask.getTotopSide() } // Let's use the same top color as the original task had
-                );
+                // generate new random pll case from selections
+                // generate new random view
+                PLLTask nextTask = generateRandomTask( true ); // Let's use the same top color as the original task had
                 penalties.Enqueue(nextTask);
             }//for
             return penalties.Count;
@@ -141,13 +139,13 @@ namespace CfopTrainer {
         }
         public int TasksCount { get { return tasks.Count;  } }
         public int PenaltiesCount { get { return penalties.Count;  } }
-        PLLTask generateRandomTask(List<string> selectedPcases, List<string> selectedViews, List<Side> selectedTotops) {
-            if(selectedPcases.Count == 0 || selectedViews.Count == 0 || selectedTotops.Count == 0) 
+        PLLTask generateRandomTask(bool penalty = false) {
+            if(checkedPllCases.Count == 0 || checkedViews.Count == 0 || checkedTotops.Count == 0) 
                 return null;
 
             //AUF/AUF part             
-            int aufIndx = random.Next(0, selectedViews.Count);
-            string auf = " " + selectedViews[aufIndx]; // AUF
+            int aufIndx = random.Next(0, checkedViews.Count);
+            string auf = " " + checkedViews[aufIndx]; // AUF
 
             // F2l-AUF is fixed 4 rotations max
             string auf2l = "";
@@ -156,12 +154,11 @@ namespace CfopTrainer {
             }//for
 
             // Totopside
-            int colIndx = random.Next(0, selectedTotops.Count);
-            Side totopSide = selectedTotops[colIndx];
+            Side totopSide = penalty ? CurrentTask.getTotopSide() : checkedTotops[ random.Next(0, checkedTotops.Count) ];
 
             // select the concrete PLL-case which has to be performed: (Aa, Z, Jb, Ra, Y, Nb, ...)
-            int randomIndex = random.Next(0, selectedPcases.Count);
-            string randomCaseName = selectedPcases[randomIndex];
+            int randomIndex = random.Next(0, checkedPllCases.Count);
+            string randomCaseName = checkedPllCases[randomIndex];
 
             // create the task instance and enqueue it
             return new PLLTask(randomCaseName, getTaskCommand(randomCaseName), totopSide, auf, auf2l);

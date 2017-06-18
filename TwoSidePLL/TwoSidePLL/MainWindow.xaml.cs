@@ -21,55 +21,55 @@ namespace CfopTrainer {
 
         bool ControlsEnabled{ 
             set {
-                cbCorrect.IsEnabled   = !value;
-                cbDiagonal.IsEnabled  = !value;
-                cbAdjacent.IsEnabled  = !value;
-                cbView.IsEnabled      = !value;
-                cbTopcolors.IsEnabled = !value;
+                cbCorrect.IsEnabled   = value;
+                cbDiagonal.IsEnabled  = value;
+                cbAdjacent.IsEnabled  = value;
+                cbView.IsEnabled      = value;
+                cbTopcolors.IsEnabled = value;
 
-                btStart.IsEnabled         = !value;
-                comPracticeSize.IsEnabled = !value;
-                tbMovesTodo.IsEnabled     = !value;
-                btReset.IsEnabled         = !value;
-                btExecute.IsEnabled       = !value;
+                btStart.IsEnabled         = value;
+                comPracticeSize.IsEnabled = value;
+                tbMovesTodo.IsEnabled     = value;
+                btReset.IsEnabled         = value;
+                btExecute.IsEnabled       = value;
 
-                cbH.IsEnabled  = !value;
-                cbUa.IsEnabled = !value;
-                cbUb.IsEnabled = !value;
-                cbZ.IsEnabled  = !value;
+                cbH.IsEnabled  = value;
+                cbUa.IsEnabled = value;
+                cbUb.IsEnabled = value;
+                cbZ.IsEnabled  = value;
 
-                cbV.IsEnabled  = !value;
-                cbY.IsEnabled  = !value;
-                cbNa.IsEnabled = !value;
-                cbNb.IsEnabled = !value;
-                cbE.IsEnabled  = !value;
+                cbV.IsEnabled  = value;
+                cbY.IsEnabled  = value;
+                cbNa.IsEnabled = value;
+                cbNb.IsEnabled = value;
+                cbE.IsEnabled  = value;
 
-                cbGa.IsEnabled = !value;
-                cbGb.IsEnabled = !value;
-                cbGc.IsEnabled = !value;
-                cbGd.IsEnabled = !value;
-                cbAa.IsEnabled = !value;
-                cbAb.IsEnabled = !value;
-                cbT.IsEnabled  = !value;
-                cbJa.IsEnabled = !value;
-                cbJb.IsEnabled = !value;
-                cbRa.IsEnabled = !value;
-                cbRb.IsEnabled = !value;
-                cbF.IsEnabled  = !value;
+                cbGa.IsEnabled = value;
+                cbGb.IsEnabled = value;
+                cbGc.IsEnabled = value;
+                cbGd.IsEnabled = value;
+                cbAa.IsEnabled = value;
+                cbAb.IsEnabled = value;
+                cbT.IsEnabled  = value;
+                cbJa.IsEnabled = value;
+                cbJb.IsEnabled = value;
+                cbRa.IsEnabled = value;
+                cbRb.IsEnabled = value;
+                cbF.IsEnabled  = value;
 
-                cbLeft.IsEnabled   = !value;
-                cbRight.IsEnabled  = !value;
-                cbFace.IsEnabled   = !value;
-                cbBack.IsEnabled   = !value;
-                cbF2Lauf.IsEnabled = !value;
+                cbLeft.IsEnabled   = value;
+                cbRight.IsEnabled  = value;
+                cbFace.IsEnabled   = value;
+                cbBack.IsEnabled   = value;
+                cbF2Lauf.IsEnabled = value;
 
-                cbYellow.IsEnabled = !value;
-                cbWhite.IsEnabled  = !value;
-                cbRed.IsEnabled    = !value;
-                cbGreen.IsEnabled  = !value;
-                cbOrange.IsEnabled = !value;
-                cbBlue.IsEnabled   = !value;
-            }
+                cbYellow.IsEnabled = value;
+                cbWhite.IsEnabled  = value;
+                cbRed.IsEnabled    = value;
+                cbGreen.IsEnabled  = value;
+                cbOrange.IsEnabled = value;
+                cbBlue.IsEnabled   = value;
+             }
         }
         public MainWindow() {
             InitializeComponent();
@@ -278,6 +278,7 @@ namespace CfopTrainer {
                     ControlsEnabled   = true; // enable back the controls
                     Title = practicer.LastRun;
 
+                    practicer = null; // destroy the practicer
                 }//ei
             }//if
         }
