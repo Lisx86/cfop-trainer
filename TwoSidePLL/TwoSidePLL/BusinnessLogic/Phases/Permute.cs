@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace CfopTrainer
-{
+namespace CfopTrainer {
     class PLLManager {
         Dictionary<string/*taskName*/, string/*task command*/> taskMap = new Dictionary<string, string>();
         public PLLManager() {
@@ -35,20 +34,36 @@ namespace CfopTrainer
         }
     }//cl
 
-     class Pcase {
-        string name;
-        string todo;
-        public Pcase(string name, string todo) {
+     class PLLCase {
+        string name; // the name of pll case
+        string todo; // instrucction how to create it from clear cube
+        public PLLCase(string name, string todo) {
             this.name = name;
             this.todo = todo;
         }
-
         public string getName() {
             return name;
         }
         virtual public string getTodo(){
             return todo;
         }
-    }
+    }//cl
 
+    class PLLTask : PLLCase {
+        Side totopSide;
+        string auf;
+        string f2lauf;
+        public PLLTask(string name, string todo, Side totopSide, string auf = "", string f2lauf = "")
+        : base(name, todo) {
+            this.totopSide = totopSide;
+            this.auf = auf;
+            this.f2lauf = f2lauf;
+        }
+        public override string getTodo() {
+            return base.getTodo() + " " + auf + " " + f2lauf;
+        }
+        public Side getTotopSide() {
+            return totopSide;
+        }
+    }//cl
 }//ns

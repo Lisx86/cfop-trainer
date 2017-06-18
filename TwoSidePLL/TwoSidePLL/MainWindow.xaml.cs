@@ -15,20 +15,160 @@ using System.Diagnostics;
 
 namespace CfopTrainer { 
     public partial class MainWindow : Window {
-        Cube theCube;
-        Practicer practicer;
+        Cube theCube;        // the heart of the program
+        Practicer practicer; // cube manager
+        Dictionary<Side, List<Polygon>>   uiData;        // Visible stickers set
+        Dictionary<Side, List<Rectangle>> uiBackView;    // Invisible stickers set
 
         public MainWindow() {
             InitializeComponent();
-            initializeFrontView();
-            initializeBackView();
-            initializeScrambles();
-            initializeViews();
-            initializeTotops();
+
+            // Initialize front view
+            uiData = new Dictionary<Side, List<Polygon>>();
+            uiData.Add(Side.Front, new List<Polygon>());
+            uiData.Add(Side.Right, new List<Polygon>());
+            uiData.Add(Side.Up, new List<Polygon>());
+            uiData[Side.Front].Add(face1);
+            uiData[Side.Front].Add(face2);
+            uiData[Side.Front].Add(face3);
+            uiData[Side.Front].Add(face4);
+            uiData[Side.Front].Add(face5);
+            uiData[Side.Front].Add(face6);
+            uiData[Side.Front].Add(face7);
+            uiData[Side.Front].Add(face8);
+            uiData[Side.Front].Add(face9);
+            uiData[Side.Right].Add(side1);
+            uiData[Side.Right].Add(side2);
+            uiData[Side.Right].Add(side3);
+            uiData[Side.Right].Add(side4);
+            uiData[Side.Right].Add(side5);
+            uiData[Side.Right].Add(side6);
+            uiData[Side.Right].Add(side7);
+            uiData[Side.Right].Add(side8);
+            uiData[Side.Right].Add(side9);
+            uiData[Side.Up].Add(ceil1);
+            uiData[Side.Up].Add(ceil2);
+            uiData[Side.Up].Add(ceil3);
+            uiData[Side.Up].Add(ceil4);
+            uiData[Side.Up].Add(ceil5);
+            uiData[Side.Up].Add(ceil6);
+            uiData[Side.Up].Add(ceil7);
+            uiData[Side.Up].Add(ceil8);
+            uiData[Side.Up].Add(ceil9);
+
+            // initializeBackView
+            uiBackView = new Dictionary<Side, List<Rectangle>>();
+            uiBackView.Add(Side.Left, new List<Rectangle>());
+            uiBackView.Add(Side.Back, new List<Rectangle>());
+            uiBackView.Add(Side.Down, new List<Rectangle>());
+            uiBackView[Side.Left].Add(left0);
+            uiBackView[Side.Left].Add(left1);
+            uiBackView[Side.Left].Add(left2);
+            uiBackView[Side.Left].Add(left3);
+            uiBackView[Side.Left].Add(left4);
+            uiBackView[Side.Left].Add(left5);
+            uiBackView[Side.Left].Add(left6);
+            uiBackView[Side.Left].Add(left7);
+            uiBackView[Side.Left].Add(left8);
+            uiBackView[Side.Back].Add(back0);
+            uiBackView[Side.Back].Add(back1);
+            uiBackView[Side.Back].Add(back2);
+            uiBackView[Side.Back].Add(back3);
+            uiBackView[Side.Back].Add(back4);
+            uiBackView[Side.Back].Add(back5);
+            uiBackView[Side.Back].Add(back6);
+            uiBackView[Side.Back].Add(back7);
+            uiBackView[Side.Back].Add(back8);
+            uiBackView[Side.Down].Add(down0);
+            uiBackView[Side.Down].Add(down1);
+            uiBackView[Side.Down].Add(down2);
+            uiBackView[Side.Down].Add(down3);
+            uiBackView[Side.Down].Add(down4);
+            uiBackView[Side.Down].Add(down5);
+            uiBackView[Side.Down].Add(down6);
+            uiBackView[Side.Down].Add(down7);
+            uiBackView[Side.Down].Add(down8);
+
             theCube = new Cube();
             practicer = new Practicer(this, theCube);
             updateGui();
         }
+
+        // Transform checkboxes values into simple string lists
+        internal List<string/*caseName*/> getCheckedPLLcases() {
+            var checkbs = new List<CheckBox>(){cbH, cbUa, cbUb, cbZ, cbV, cbY, cbNa, cbNb, cbE, cbGa, cbGb, cbGc, cbGd, cbAa, cbAb, cbT, cbJa, cbJb, cbRa, cbRb, cbF};
+            var ret     = new List<string>();
+            foreach(CheckBox cb in checkbs) {
+                if(cb.IsChecked.Value) {
+                    ret.Add(cb.Content.ToString());
+                }
+            }//for
+            return ret;
+        }
+        internal List<string/*AUF*/>      getSelectedViews() {
+            var views = new Dictionary<CheckBox, string/*AUF*/>(); // checkboxes-keys, tied to AUF-command strings
+            views[cbFace]  = "";   //  0U noop   // TODO: these strings should perhaps be defined somewhere out of UI logic
+            views[cbRight] = "U";  //  1U
+            views[cbBack]  = "U2"; //  2U
+            views[cbLeft]  = "U'"; //  1U'
+           // views.Add(cbTurnF2L); // not needed, always 0..4 random
+
+            var ret = new List<string/*AUF*/>();
+            foreach (KeyValuePair<CheckBox, string> pair in views) {
+                CheckBox cb = pair.Key;
+                if (cb.IsChecked.Value) {
+                    ret.Add(pair.Value);
+                }
+            }//for
+            return ret;
+        }
+        internal List<Side>               getSelectedTotops() {
+            var totops = new Dictionary<CheckBox, Side>(); // specific colors tied to the side were they must be turned
+            totops.Add(cbYellow, Side.Up);
+            totops.Add(cbWhite,  Side.Down);
+            totops.Add(cbRed,    Side.Front);
+            totops.Add(cbGreen,  Side.Right);
+            totops.Add(cbOrange, Side.Back);
+            totops.Add(cbBlue,   Side.Left);
+
+            List<Side> ret = new List<Side>();
+            foreach (KeyValuePair<CheckBox, Side> pair in totops) {
+                CheckBox cb = pair.Key;
+                if (cb.IsChecked.Value) {
+                    ret.Add(pair.Value);
+                }
+            }//for
+            return ret;
+        }
+        
+         // Just transfers CUBE state into GUI
+        private void updateGui() {
+            Dictionary<Side, List<Color>> cubeData = theCube.getData();
+            foreach (Side side in Enum.GetValues(typeof(Side))) {
+                switch (side) {
+                    case Side.Up:
+                    case Side.Front:
+                    case Side.Right:
+                        if (cubeData[side].Count == uiData[side].Count){
+                            for (int counter = 0; counter < cubeData[side].Count; counter++) {
+                                uiData[side][counter].Fill = new SolidColorBrush(cubeData[side][counter]);
+                            }
+                        }
+                        break;
+                    case Side.Left:
+                    case Side.Back:
+                    case Side.Down:
+                        if (cubeData[side].Count == uiBackView[side].Count) {
+                            for (int counter = 0; counter < cubeData[side].Count; counter++){
+                                uiBackView[side][counter].Fill = new SolidColorBrush(cubeData[side][counter]);
+                            }
+                        }
+                        break;
+                }//sw
+            }//for          
+        }//fn
+        
+        // Direct user interaction methods
         private void click_startPractice(object sender, RoutedEventArgs e) {
             string selectedText = (comPracticeSize.SelectedItem as ComboBoxItem).Content.ToString();
             if (selectedText.Length > 3)
@@ -127,203 +267,20 @@ namespace CfopTrainer {
         {
 
         }
-
-        Dictionary<Side, List<Polygon>> uiData;
-        Dictionary<Side, List<Rectangle>> uiBackView;
-        List<CheckBox> scrambles = new List<CheckBox>(); // i think it should be a part of practicer
-        Dictionary<CheckBox, string/*AUF*/> views = new Dictionary<CheckBox, string>();     // AUF for t
-        Dictionary<CheckBox, Side> totops = new Dictionary<CheckBox, Side>(); //
-
-        private void initializeFrontView()
-        {
-            uiData = new Dictionary<Side, List<Polygon>>();
-            uiData.Add(Side.Front, new List<Polygon>());
-            uiData.Add(Side.Right, new List<Polygon>());
-            uiData.Add(Side.Up, new List<Polygon>());
-            uiData[Side.Front].Add(face1);
-            uiData[Side.Front].Add(face2);
-            uiData[Side.Front].Add(face3);
-            uiData[Side.Front].Add(face4);
-            uiData[Side.Front].Add(face5);
-            uiData[Side.Front].Add(face6);
-            uiData[Side.Front].Add(face7);
-            uiData[Side.Front].Add(face8);
-            uiData[Side.Front].Add(face9);
-            uiData[Side.Right].Add(side1);
-            uiData[Side.Right].Add(side2);
-            uiData[Side.Right].Add(side3);
-            uiData[Side.Right].Add(side4);
-            uiData[Side.Right].Add(side5);
-            uiData[Side.Right].Add(side6);
-            uiData[Side.Right].Add(side7);
-            uiData[Side.Right].Add(side8);
-            uiData[Side.Right].Add(side9);
-            uiData[Side.Up].Add(ceil1);
-            uiData[Side.Up].Add(ceil2);
-            uiData[Side.Up].Add(ceil3);
-            uiData[Side.Up].Add(ceil4);
-            uiData[Side.Up].Add(ceil5);
-            uiData[Side.Up].Add(ceil6);
-            uiData[Side.Up].Add(ceil7);
-            uiData[Side.Up].Add(ceil8);
-            uiData[Side.Up].Add(ceil9);
-        }
-        private void initializeBackView()
-        {
-            uiBackView = new Dictionary<Side, List<Rectangle>>();
-            uiBackView.Add(Side.Left, new List<Rectangle>());
-            uiBackView.Add(Side.Back, new List<Rectangle>());
-            uiBackView.Add(Side.Down, new List<Rectangle>());
-            uiBackView[Side.Left].Add(left0);
-            uiBackView[Side.Left].Add(left1);
-            uiBackView[Side.Left].Add(left2);
-            uiBackView[Side.Left].Add(left3);
-            uiBackView[Side.Left].Add(left4);
-            uiBackView[Side.Left].Add(left5);
-            uiBackView[Side.Left].Add(left6);
-            uiBackView[Side.Left].Add(left7);
-            uiBackView[Side.Left].Add(left8);
-            uiBackView[Side.Back].Add(back0);
-            uiBackView[Side.Back].Add(back1);
-            uiBackView[Side.Back].Add(back2);
-            uiBackView[Side.Back].Add(back3);
-            uiBackView[Side.Back].Add(back4);
-            uiBackView[Side.Back].Add(back5);
-            uiBackView[Side.Back].Add(back6);
-            uiBackView[Side.Back].Add(back7);
-            uiBackView[Side.Back].Add(back8);
-            uiBackView[Side.Down].Add(down0);
-            uiBackView[Side.Down].Add(down1);
-            uiBackView[Side.Down].Add(down2);
-            uiBackView[Side.Down].Add(down3);
-            uiBackView[Side.Down].Add(down4);
-            uiBackView[Side.Down].Add(down5);
-            uiBackView[Side.Down].Add(down6);
-            uiBackView[Side.Down].Add(down7);
-            uiBackView[Side.Down].Add(down8);
-        }
-        private void initializeScrambles()
-        {
-            scrambles.Add(cbH);
-            scrambles.Add(cbUa);
-            scrambles.Add(cbUb);
-            scrambles.Add(cbZ);
-
-            scrambles.Add(cbV);
-            scrambles.Add(cbY);
-            scrambles.Add(cbNa);
-            scrambles.Add(cbNb);
-            scrambles.Add(cbE);
-
-            scrambles.Add(cbGa);
-            scrambles.Add(cbGb);
-            scrambles.Add(cbGc);
-            scrambles.Add(cbGd);
-            scrambles.Add(cbAa);
-            scrambles.Add(cbAb);
-            scrambles.Add(cbT);
-            scrambles.Add(cbJa);
-            scrambles.Add(cbJb);
-            scrambles.Add(cbRa);
-            scrambles.Add(cbRb);
-            scrambles.Add(cbF);
-        }
-        private void initializeViews() {
-            views[cbFace]  = "";   //  0U noop
-            views[cbRight] = "U";  //  1U
-            views[cbBack]  = "U2"; //  2U
-            views[cbLeft]  = "U'"; //  1U'
-           // views.Add(cbTurnF2L); // not needed, always 0..4 random
-        }
-        private void initializeTotops() {
-            totops.Add(cbYellow, Side.Up);
-            totops.Add(cbWhite,  Side.Down);
-            totops.Add(cbRed,    Side.Front);
-            totops.Add(cbGreen,  Side.Right);
-            totops.Add(cbOrange, Side.Back);
-            totops.Add(cbBlue,   Side.Left);
-        }
-        internal List<string> getSelectedScrambles() {
-            List<string> ret = new List<string>();
-            foreach(CheckBox cb in scrambles) {
-                if(cb.IsChecked.Value) {
-                    ret.Add(cb.Content.ToString());
-                }
-            }//for
-            return ret;
-        }
-        internal List<string/*AUF*/> getSelectedViews() {
-            var ret = new List<string/*AUF*/>();
-            foreach (KeyValuePair<CheckBox, string> pair in views) {
-                CheckBox cb = pair.Key;
-                if (cb.IsChecked.Value) {
-                    ret.Add(pair.Value);
-                }
-            }//for
-            return ret;
-        }
-        internal List<Side> getSelectedTotops() {
-            List<Side> ret = new List<Side>();
-            foreach (KeyValuePair<CheckBox, Side> pair in totops) {
-                CheckBox cb = pair.Key;
-                if (cb.IsChecked.Value) {
-                    ret.Add(pair.Value);
-                }
-            }//for
-            return ret;
-        }
-        private void updateGui() {
-            Dictionary<Side, List<Color>> cubeData = theCube.getData();
-            foreach (Side side in Enum.GetValues(typeof(Side))) {
-                switch (side) {
-                    case Side.Up:
-                    case Side.Front:
-                    case Side.Right:
-                        if (cubeData[side].Count == uiData[side].Count){
-                            for (int counter = 0; counter < cubeData[side].Count; counter++) {
-                                uiData[side][counter].Fill = new SolidColorBrush(cubeData[side][counter]);
-                            }
-                        }
-                        break;
-                    case Side.Left:
-                    case Side.Back:
-                    case Side.Down:
-                        if (cubeData[side].Count == uiBackView[side].Count) {
-                            for (int counter = 0; counter < cubeData[side].Count; counter++){
-                                uiBackView[side][counter].Fill = new SolidColorBrush(cubeData[side][counter]);
-                            }
-                        }
-                        break;
-                }//sw
-            }//for          
-        }//fn
     }//cl
 
-    class Task : Pcase {
-        Side totopSide;
-        string auf;
-        string f2lauf;
-        public Task(string name, string todo, Side totopSide, string auf = "", string f2lauf = "")
-        : base(name, todo) {
-            this.totopSide = totopSide;
-            this.auf = auf;
-            this.f2lauf = f2lauf;
-        }
-        public override string getTodo() {
-            return base.getTodo() + " " + auf + " " + f2lauf;
-        }
-        public Side getTotopSide() {
-            return totopSide;
-        }
-    }
+
 
     partial class Practicer {
         Random random = new Random();
         Cube cube;
         PLLManager pllman = new PLLManager();
-        Queue<Task> tasks     = new Queue<Task>();
-        Queue<Task> penalties = new Queue<Task>();
-        public Task CurrentTask { get; set; }
+        Queue<PLLTask> tasks     = new Queue<PLLTask>();
+        Queue<PLLTask> penalties = new Queue<PLLTask>();
+        public PLLTask CurrentTask { get; set; }
+
+        MainWindow form; // temporary. must use a delegate
+        Stopwatch watch = Stopwatch.StartNew();
 
         public Practicer(MainWindow form, Cube cube) {
             this.form = form;
@@ -331,8 +288,8 @@ namespace CfopTrainer {
         }
         public void newPractice(int tasksToEnque) {
               for(/**/; tasksToEnque > 0; tasksToEnque--) {
-                Task nextTask = generateRandomTask(
-                      form.getSelectedScrambles()
+                PLLTask nextTask = generateRandomTask(
+                      form.getCheckedPLLcases()
                     , form.getSelectedViews()
                     , form.getSelectedTotops()
                 );
@@ -345,10 +302,10 @@ namespace CfopTrainer {
             int colIndx = random.Next(0, selectedTotops.Count);
             Side totopSide = selectedTotops.Count > 0 ? selectedTotops[colIndx] : Side.Up; // up by default
 
-            List<Task> orderedTasks = new List<Task>();
-            foreach(var selPcaseName in form.getSelectedScrambles()) {
+            List<PLLTask> orderedTasks = new List<PLLTask>();
+            foreach(var selPcaseName in form.getCheckedPLLcases()) {
                 foreach(var selView in form.getSelectedViews()) {
-                    Task nextTask = new Task(
+                    PLLTask nextTask = new PLLTask(
                           selPcaseName
                         , pllman.getTaskCommand(selPcaseName)
                         , totopSide
@@ -384,8 +341,8 @@ namespace CfopTrainer {
         public int savePenalty(int deceptiveTasksCount) {
             penalties.Enqueue(CurrentTask);
             for(/**/; deceptiveTasksCount > 0; deceptiveTasksCount--) {
-                Task nextTask = generateRandomTask(
-                      form.getSelectedScrambles()
+                PLLTask nextTask = generateRandomTask(
+                      form.getCheckedPLLcases()
                     , form.getSelectedViews()
                     , new List<Side>(){ CurrentTask.getTotopSide() }
                 );
@@ -394,8 +351,6 @@ namespace CfopTrainer {
             return penalties.Count;
         }
 
-        MainWindow form; // temporary. must use a delegate
-        Stopwatch watch = Stopwatch.StartNew();
         bool m_running = false;
         public bool Running
         {
@@ -472,7 +427,7 @@ namespace CfopTrainer {
         }
         public int TasksCount { get { return tasks.Count;  } }
         public int PenaltiesCount { get { return penalties.Count;  } }
-        Task generateRandomTask(List<string> selectedPcases, List<string> selectedViews, List<Side> selectedTotops) {
+        PLLTask generateRandomTask(List<string> selectedPcases, List<string> selectedViews, List<Side> selectedTotops) {
             if(selectedPcases.Count == 0 || selectedViews.Count == 0 || selectedTotops.Count == 0) 
                 return null;
 
@@ -495,7 +450,7 @@ namespace CfopTrainer {
             string randomCaseName = selectedPcases[randomIndex];
 
             // create the task instance and enqueue it
-            return new Task(randomCaseName, pllman.getTaskCommand(randomCaseName), totopSide, auf, auf2l);
+            return new PLLTask(randomCaseName, pllman.getTaskCommand(randomCaseName), totopSide, auf, auf2l);
         }
     }//cl
 }//ns

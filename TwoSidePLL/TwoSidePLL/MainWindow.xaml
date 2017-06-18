@@ -1,7 +1,7 @@
 ﻿<Window x:Class="CfopTrainer.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" Height="639" Width="1029" WindowStartupLocation="CenterScreen" ResizeMode="CanResize" IsEnabled="True" KeyDown="keyDown">
+        Title="Cfop Trainer" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" Height="639" Width="1029" WindowStartupLocation="CenterScreen" ResizeMode="CanResize" IsEnabled="True" KeyDown="keyDown" Icon="/CfopTrainer;component/1497822694_api.ico">
     <Grid Name="theGrid" >
         <Grid.Background>
             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
