@@ -1,7 +1,7 @@
 ﻿<Window x:Class="TwoSidePLL.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" Height="692" Width="1015" WindowStartupLocation="CenterScreen" ResizeMode="CanResize" IsEnabled="True" KeyDown="keyDown">
+        Title="MainWindow" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" Height="662" Width="1029" WindowStartupLocation="CenterScreen" ResizeMode="CanResize" IsEnabled="True" KeyDown="keyDown">
     <Grid Name="theGrid" >
         <Grid.Background>
             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -36,253 +36,267 @@
         <Polygon Name="ceil7" Fill="Yellow" Points="84 139, 150 115, 208 137, 143 165" />
         <Polygon Name="ceil8" Fill="Yellow" Points="153 164, 218 138, 280 166, 212 197" />
         <Polygon Name="ceil9" Fill="Yellow" Points="223 192, 289 165, 364 195, 292 224" />
-        <TextBox HorizontalAlignment="Left" Margin="1017,20,0,0" Name="tbMovesTodo" Width="463" Text="(y2) L' U' L (y') R2' u (R' U R U' R) u' R2" FontSize="24" FontWeight="Normal" Height="40" VerticalAlignment="Top" />
-        <Rectangle Height="39" HorizontalAlignment="Left" Margin="1048,131,0,0" Name="left0" Stroke="Black" VerticalAlignment="Top" Width="41" />
-        <Rectangle Height="39" HorizontalAlignment="Left" Margin="1118,131,0,0" Name="left1" Stroke="Black" VerticalAlignment="Top" Width="41" />
-        <Rectangle Height="39" HorizontalAlignment="Left" Margin="1186,269,0,0" Name="left8" Stroke="Black" VerticalAlignment="Top" Width="41" />
-        <Rectangle Height="39" HorizontalAlignment="Left" Margin="1118,269,0,0" Name="left7" Stroke="Black" VerticalAlignment="Top" Width="41" />
-        <Rectangle Height="39" HorizontalAlignment="Left" Margin="1048,269,0,0" Name="left6" Stroke="Black" VerticalAlignment="Top" Width="41" />
-        <Rectangle Height="39" HorizontalAlignment="Left" Margin="1186,203,0,0" Name="left5" Stroke="Black" VerticalAlignment="Top" Width="41" />
-        <Rectangle Height="39" HorizontalAlignment="Left" Margin="1118,203,0,0" Name="left4" Stroke="Black" VerticalAlignment="Top" Width="41" />
-        <Rectangle Height="39" HorizontalAlignment="Left" Margin="1048,203,0,0" Name="left3" Stroke="Black" VerticalAlignment="Top" Width="41" />
-        <Rectangle Height="39" HorizontalAlignment="Left" Margin="1186,131,0,0" Name="left2" Stroke="Black" VerticalAlignment="Top" Width="41" />
-        <Rectangle Height="39" HorizontalAlignment="Left" Margin="1270,131,0,0" Name="back0" Stroke="Black" VerticalAlignment="Top" Width="41" />
-        <Rectangle Height="39" HorizontalAlignment="Left" Margin="1340,131,0,0" Name="back1" Stroke="Black" VerticalAlignment="Top" Width="41" />
-        <Rectangle Height="39" HorizontalAlignment="Left" Margin="1408,269,0,0" Name="back8" Stroke="Black" VerticalAlignment="Top" Width="41" />
-        <Rectangle Height="39" HorizontalAlignment="Left" Margin="1340,269,0,0" Name="back7" Stroke="Black" VerticalAlignment="Top" Width="41" />
-        <Rectangle Height="39" HorizontalAlignment="Left" Margin="1270,269,0,0" Name="back6" Stroke="Black" VerticalAlignment="Top" Width="41" />
-        <Rectangle Height="39" HorizontalAlignment="Left" Margin="1408,203,0,0" Name="back5" Stroke="Black" VerticalAlignment="Top" Width="41" />
-        <Rectangle Height="39" HorizontalAlignment="Left" Margin="1340,203,0,0" Name="back4" Stroke="Black" VerticalAlignment="Top" Width="41" />
-        <Rectangle Height="39" HorizontalAlignment="Left" Margin="1270,203,0,0" Name="back3" Stroke="Black" VerticalAlignment="Top" Width="41" />
-        <Rectangle Height="39" HorizontalAlignment="Left" Margin="1408,131,0,0" Name="back2" Stroke="Black" VerticalAlignment="Top" Width="41" />
-        <Rectangle Height="39" HorizontalAlignment="Left" Margin="1270,353,0,0" Name="down0" Stroke="Black" VerticalAlignment="Top" Width="41" />
-        <Rectangle Height="39" HorizontalAlignment="Left" Margin="1340,353,0,0" Name="down1" Stroke="Black" VerticalAlignment="Top" Width="41" />
-        <Rectangle Height="39" HorizontalAlignment="Left" Margin="1408,491,0,0" Name="down8" Stroke="Black" VerticalAlignment="Top" Width="41" />
-        <Rectangle Height="39" HorizontalAlignment="Left" Margin="1340,491,0,0" Name="down7" Stroke="Black" VerticalAlignment="Top" Width="41" />
-        <Rectangle Height="39" HorizontalAlignment="Left" Margin="1270,491,0,0" Name="down6" Stroke="Black" VerticalAlignment="Top" Width="41" />
-        <Rectangle Height="39" HorizontalAlignment="Left" Margin="1408,425,0,0" Name="down5" Stroke="Black" VerticalAlignment="Top" Width="41" />
-        <Rectangle Height="39" HorizontalAlignment="Left" Margin="1340,425,0,0" Name="down4" Stroke="Black" VerticalAlignment="Top" Width="41" />
-        <Rectangle Height="39" HorizontalAlignment="Left" Margin="1270,425,0,0" Name="down3" Stroke="Black" VerticalAlignment="Top" Width="41" />
-        <Rectangle Height="39" HorizontalAlignment="Left" Margin="1408,353,0,0" Name="down2" Stroke="Black" VerticalAlignment="Top" Width="41" />
         <Image Height="574" Name="image1" Stretch="Uniform" Width="631" Source="/TwoSidePLL;component/Images/cube-template.png" Canvas.Left="0" Canvas.Top="6" OpacityMask="{x:Null}" HorizontalAlignment="Left" VerticalAlignment="Top"></Image>
-        <Button Content="Execute" Height="42" HorizontalAlignment="Left" Margin="1017,70,0,0" Name="btExecute" VerticalAlignment="Top" Width="294" Click="click_execute" />
-        <Button Content="Reset stickers" Height="42" HorizontalAlignment="Left" Margin="1339,70,0,0" Name="btReset" VerticalAlignment="Top" Width="110" Click="click_reset" />
-        <GroupBox Header="Correct:" Height="147" HorizontalAlignment="Left" Margin="556,29,0,0" Name="gbCorrect" VerticalAlignment="Top" Width="202" FontSize="16">
-            <Grid>
-                <CheckBox Content="H" Height="18" HorizontalAlignment="Left" Margin="24,15,0,0" Name="cbH" VerticalAlignment="Top" Width="44" FontSize="13" FontWeight="Bold" IsChecked="True">
-                    <CheckBox.LayoutTransform>
-                        <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
-                    </CheckBox.LayoutTransform>
-                </CheckBox>
-                <CheckBox Content="Ua" FontSize="13" FontWeight="Bold" HorizontalAlignment="Left" Margin="24,51,0,0" Name="cbUa" Width="44" Height="19" VerticalAlignment="Top" IsChecked="True">
-                    <CheckBox.LayoutTransform>
-                        <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
-                    </CheckBox.LayoutTransform>
-                </CheckBox>
-                <CheckBox Content="Z" FontSize="13" FontWeight="Bold" Height="18" HorizontalAlignment="Left" Margin="24,85,0,0" Name="cbZ" VerticalAlignment="Top" Width="44" IsChecked="True">
-                    <CheckBox.LayoutTransform>
-                        <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
-                    </CheckBox.LayoutTransform>
-                </CheckBox>
-                <CheckBox Content="Ub" FontSize="13" FontWeight="Bold" Height="19" HorizontalAlignment="Left" Margin="96,51,0,0" Name="cbUb" VerticalAlignment="Top" Width="44" IsChecked="True">
-                    <CheckBox.LayoutTransform>
-                        <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
-                    </CheckBox.LayoutTransform>
-                </CheckBox>
-                <CheckBox FontSize="13" FontWeight="Bold" Height="18" HorizontalAlignment="Left" Margin="157,-20,0,0" Name="cbCorrect" VerticalAlignment="Top" Width="19" Checked="click_group_Correct" Unchecked="click_group_Correct" IsChecked="True">
-                    <CheckBox.LayoutTransform>
-                        <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
-                    </CheckBox.LayoutTransform>
-                </CheckBox>
-            </Grid>
-        </GroupBox>
-        <GroupBox FontSize="16" Header="Diagonal:" Height="147" HorizontalAlignment="Left" Margin="773,29,0,0" Name="gbDiagonal" VerticalAlignment="Top" Width="202">
-            <Grid>
-                <CheckBox Content="V" FontSize="13" FontWeight="Bold" Height="18" HorizontalAlignment="Left" Margin="22,10,0,0" Name="cbV" VerticalAlignment="Top" Width="44" IsChecked="True">
-                    <CheckBox.LayoutTransform>
-                        <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
-                    </CheckBox.LayoutTransform>
-                </CheckBox>
-                <CheckBox Content="Na" FontSize="13" FontWeight="Bold" Height="19" HorizontalAlignment="Left" Margin="22,47,0,0" Name="cbNa" VerticalAlignment="Top" Width="44" IsChecked="True">
-                    <CheckBox.LayoutTransform>
-                        <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
-                    </CheckBox.LayoutTransform>
-                </CheckBox>
-                <CheckBox Content="Y" FontSize="13" FontWeight="Bold" Height="18" HorizontalAlignment="Left" Margin="99,9,0,0" Name="cbY" VerticalAlignment="Top" Width="44" IsChecked="True">
-                    <CheckBox.LayoutTransform>
-                        <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
-                    </CheckBox.LayoutTransform>
-                </CheckBox>
-                <CheckBox Content="Nb" FontSize="13" FontWeight="Bold" Height="19" HorizontalAlignment="Left" Margin="99,47,0,0" Name="cbNb" VerticalAlignment="Top" Width="44" IsChecked="True">
-                    <CheckBox.LayoutTransform>
-                        <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
-                    </CheckBox.LayoutTransform>
-                </CheckBox>
-                <CheckBox Content="E" FontSize="13" FontWeight="Bold" Height="18" Margin="23,82,0,0" Name="cbE" VerticalAlignment="Top" HorizontalAlignment="Left" Width="66" IsChecked="True">
-                    <CheckBox.LayoutTransform>
-                        <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
-                    </CheckBox.LayoutTransform>
-                </CheckBox>
-                <CheckBox FontSize="13" FontWeight="Bold" Height="18" HorizontalAlignment="Left" Margin="158,-22,0,0" Name="cbDiagonal" VerticalAlignment="Top" Width="19" Checked="click_group_Diagonal" Unchecked="click_group_Diagonal" IsChecked="True">
-                    <CheckBox.LayoutTransform>
-                        <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
-                    </CheckBox.LayoutTransform>
-                </CheckBox>
-            </Grid>
-        </GroupBox>
-        <GroupBox FontSize="16" Header="Adjacent:" Height="276" Margin="556,188,0,0" Name="gbAdjacent" VerticalAlignment="Top" HorizontalAlignment="Left" Width="239">
-            <Grid>
-                <CheckBox Content="Ga" FontSize="13" FontWeight="Bold" Height="18" HorizontalAlignment="Left" Margin="27,9,0,0" Name="cbGa" VerticalAlignment="Top" Width="44" IsChecked="True">
-                    <CheckBox.LayoutTransform>
-                        <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
-                    </CheckBox.LayoutTransform>
-                </CheckBox>
-                <CheckBox Content="Ja" FontSize="13" FontWeight="Bold" Height="19" HorizontalAlignment="Left" Margin="32,163,0,0" Name="cbJa" VerticalAlignment="Top" Width="44" IsChecked="True">
-                    <CheckBox.LayoutTransform>
-                        <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
-                    </CheckBox.LayoutTransform>
-                </CheckBox>
-                <CheckBox Content="T" FontSize="13" FontWeight="Bold" Height="18" HorizontalAlignment="Left" Margin="53,123,0,0" Name="cbT" VerticalAlignment="Top" Width="44" IsChecked="True">
-                    <CheckBox.LayoutTransform>
-                        <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
-                    </CheckBox.LayoutTransform>
-                </CheckBox>
-                <CheckBox Content="Jb" FontSize="13" FontWeight="Bold" Height="19" HorizontalAlignment="Left" Margin="132,164,0,0" Name="cbJb" VerticalAlignment="Top" Width="44" IsChecked="True">
-                    <CheckBox.LayoutTransform>
-                        <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
-                    </CheckBox.LayoutTransform>
-                </CheckBox>
-                <CheckBox Content="F" FontSize="13" FontWeight="Bold" Height="18" HorizontalAlignment="Left" Margin="113,123,0,0" Name="cbF" VerticalAlignment="Top" Width="44" IsChecked="True">
-                    <CheckBox.LayoutTransform>
-                        <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
-                    </CheckBox.LayoutTransform>
-                </CheckBox>
-                <CheckBox Content="Gb" FontSize="13" FontWeight="Bold" Height="18" HorizontalAlignment="Left" Margin="126,8,0,0" Name="cbGb" VerticalAlignment="Top" Width="41" IsChecked="True">
-                    <CheckBox.LayoutTransform>
-                        <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
-                    </CheckBox.LayoutTransform>
-                </CheckBox>
-                <CheckBox Content="Gc" FontSize="13" FontWeight="Bold" Height="18" HorizontalAlignment="Left" Margin="28,43,0,0" Name="cbGc" VerticalAlignment="Top" Width="44" IsChecked="True">
-                    <CheckBox.LayoutTransform>
-                        <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
-                    </CheckBox.LayoutTransform>
-                </CheckBox>
-                <CheckBox Content="Gd" FontSize="13" FontWeight="Bold" Height="18" HorizontalAlignment="Left" Margin="126,42,0,0" Name="cbGd" VerticalAlignment="Top" Width="45" IsChecked="True">
-                    <CheckBox.LayoutTransform>
-                        <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
-                    </CheckBox.LayoutTransform>
-                </CheckBox>
-                <CheckBox Content="Aa" FontSize="13" FontWeight="Bold" Height="19" HorizontalAlignment="Left" Margin="30,84,0,0" Name="cbAa" VerticalAlignment="Top" Width="44" IsChecked="True">
-                    <CheckBox.LayoutTransform>
-                        <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
-                    </CheckBox.LayoutTransform>
-                </CheckBox>
-                <CheckBox Content="Ab" FontSize="13" FontWeight="Bold" Height="19" HorizontalAlignment="Left" Margin="131,83,0,0" Name="cbAb" VerticalAlignment="Top" Width="44" IsChecked="True">
-                    <CheckBox.LayoutTransform>
-                        <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
-                    </CheckBox.LayoutTransform>
-                </CheckBox>
-                <CheckBox Content="Ra" FontSize="13" FontWeight="Bold" Height="19" HorizontalAlignment="Left" Margin="32,198,0,0" Name="cbRa" VerticalAlignment="Top" Width="44" IsChecked="True">
-                    <CheckBox.LayoutTransform>
-                        <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
-                    </CheckBox.LayoutTransform>
-                </CheckBox>
-                <CheckBox Content="Rb" FontSize="13" FontWeight="Bold" Height="19" HorizontalAlignment="Left" Margin="131,198,0,0" Name="cbRb" VerticalAlignment="Top" Width="44" IsChecked="True">
-                    <CheckBox.LayoutTransform>
-                        <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
-                    </CheckBox.LayoutTransform>
-                </CheckBox>
-                <CheckBox FontSize="13" FontWeight="Bold" Height="18" HorizontalAlignment="Left" Margin="146,-22,0,0" Name="cbAdjacent" VerticalAlignment="Top" Width="19" Checked="click_group_Anjacent" Unchecked="click_group_Anjacent" IsChecked="True">
-                    <CheckBox.LayoutTransform>
-                        <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
-                    </CheckBox.LayoutTransform>
-                </CheckBox>
-            </Grid>
-        </GroupBox>
         <ProgressBar HorizontalAlignment="Left" Margin="12,0,0,12" Name="pbTasks" Width="395" Value="45" Height="25" VerticalAlignment="Bottom" />
-        <Button Content="Start" Height="36" HorizontalAlignment="Left" Margin="556,518,0,0" Name="btStart" VerticalAlignment="Top" Width="218" FontSize="20" Click="click_startPractice" />
-        <ComboBox Height="36" Margin="681,476,0,0" Name="comPracticeSize" VerticalAlignment="Top" SelectedIndex="3" FontSize="20" HorizontalAlignment="Left" Width="93">
-            <ComboBoxItem Content="10" />
-            <ComboBoxItem Content="25" />
-            <ComboBoxItem Content="50" />
-            <ComboBoxItem Content="ALL-84 (once each)" />
-        </ComboBox>
-        <GroupBox FontSize="16" Header="View:" Height="248" HorizontalAlignment="Left" Margin="815,188,0,0" Name="gbView" VerticalAlignment="Top" Width="154">
-            <Grid>
-                <CheckBox FontSize="13" FontWeight="Bold" Height="18" HorizontalAlignment="Left" Margin="16,17,0,0" Name="cbFace" VerticalAlignment="Top" Width="59" IsChecked="True" Content="Face">
-                    <CheckBox.LayoutTransform>
-                        <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
-                    </CheckBox.LayoutTransform>
-                </CheckBox>
-                <CheckBox FontSize="13" FontWeight="Bold" Height="18" HorizontalAlignment="Left" Margin="16,57,0,0" Name="cbRight" VerticalAlignment="Top" Width="58" IsChecked="True" Content="Right">
-                    <CheckBox.LayoutTransform>
-                        <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
-                    </CheckBox.LayoutTransform>
-                </CheckBox>
-                <CheckBox FontSize="13" FontWeight="Bold" Height="18" HorizontalAlignment="Left" Margin="15,96,0,0" Name="cbBack" VerticalAlignment="Top" Width="64" IsChecked="True" Content="Back">
-                    <CheckBox.LayoutTransform>
-                        <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
-                    </CheckBox.LayoutTransform>
-                </CheckBox>
-                <CheckBox FontSize="13" FontWeight="Bold" Height="18" HorizontalAlignment="Left" Margin="15,131,0,0" Name="cbLeft" VerticalAlignment="Top" Width="58" IsChecked="True" Content="Left">
-                    <CheckBox.LayoutTransform>
-                        <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
-                    </CheckBox.LayoutTransform>
-                </CheckBox>
-                <CheckBox Content="F2L-AUF" FontSize="13" FontWeight="Bold" Height="18" HorizontalAlignment="Left" IsChecked="True" Margin="14,179,0,0" Name="cbF2Lauf" VerticalAlignment="Top" Width="78">
-                    <CheckBox.LayoutTransform>
-                        <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
-                    </CheckBox.LayoutTransform>
-                </CheckBox>
-                <CheckBox FontSize="13" FontWeight="Bold" Height="18" HorizontalAlignment="Left" IsChecked="True" Margin="103,-24,0,0" Name="cbView" VerticalAlignment="Top" Width="19" Checked="click_group_View" Unchecked="click_group_View">
-                    <CheckBox.LayoutTransform>
-                        <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
-                    </CheckBox.LayoutTransform>
-                </CheckBox>
-            </Grid>
-        </GroupBox>
-        <GroupBox FontSize="16" Header="Top color:" Height="154" HorizontalAlignment="Left" Margin="786,467,0,0" Name="gbTopcolors" VerticalAlignment="Top" Width="196">
-            <Grid>
-                <CheckBox Content="White" FontSize="13" FontWeight="Bold" Height="15" HorizontalAlignment="Left" IsChecked="False" Margin="79,55,0,0" Name="cbWhite" VerticalAlignment="Top" Width="17">
-                    <CheckBox.LayoutTransform>
-                        <ScaleTransform ScaleX="2" ScaleY="2" />
-                    </CheckBox.LayoutTransform>
-                </CheckBox>
-                <CheckBox Content="Red" FontSize="13" FontWeight="Bold" Height="16" HorizontalAlignment="Left" IsChecked="False" Margin="59,94,0,0" Name="cbRed" VerticalAlignment="Top" Width="17" Background="#FFFF1010">
-                    <CheckBox.LayoutTransform>
-                        <ScaleTransform ScaleX="2" ScaleY="2" />
-                    </CheckBox.LayoutTransform>
-                </CheckBox>
-                <CheckBox Content="Green" FontSize="13" FontWeight="Bold" Height="18" HorizontalAlignment="Left" IsChecked="False" Margin="126,45,0,0" Name="cbGreen" VerticalAlignment="Top" Width="17" Background="#FF00B700">
-                    <CheckBox.LayoutTransform>
-                        <ScaleTransform ScaleX="2" ScaleY="2" />
-                    </CheckBox.LayoutTransform>
-                </CheckBox>
-                <CheckBox Content="Orange" FontSize="13" FontWeight="Bold" Height="18" HorizontalAlignment="Left" IsChecked="False" Margin="83,-2,0,0" Name="cbOrange" VerticalAlignment="Top" Width="18" Background="#FFFF9D00">
-                    <CheckBox.LayoutTransform>
-                        <ScaleTransform ScaleX="2" ScaleY="2" />
-                    </CheckBox.LayoutTransform>
-                </CheckBox>
-                <CheckBox FontSize="13" FontWeight="Bold" Height="18" HorizontalAlignment="Left" IsChecked="False" Margin="146,-20,0,0" Name="cbTopcolors" VerticalAlignment="Top" Width="19" Checked="click_group_Topcolor" Unchecked="click_group_Topcolor">
-                    <CheckBox.LayoutTransform>
-                        <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
-                    </CheckBox.LayoutTransform>
-                </CheckBox>
-                <CheckBox Content="Blue" FontSize="13" FontWeight="Bold" Height="16" HorizontalAlignment="Left" IsChecked="False" Margin="16,44,0,0" Name="cbBlue" VerticalAlignment="Top" Width="18" Background="#FF5561FF">
-                    <CheckBox.LayoutTransform>
-                        <ScaleTransform ScaleX="2" ScaleY="2" />
-                    </CheckBox.LayoutTransform>
-                </CheckBox>
-                <CheckBox Content="Yellow" FontSize="13" FontWeight="Bold" Height="16" HorizontalAlignment="Left" IsChecked="True" Margin="63,36,0,0" Name="cbYellow" VerticalAlignment="Top" Width="17" Background="#FFD2FF00">
-                    <CheckBox.LayoutTransform>
-                        <ScaleTransform ScaleX="2" ScaleY="2" />
-                    </CheckBox.LayoutTransform>
-                </CheckBox>
-            </Grid>
-        </GroupBox>
-        <Label Content="Correct answers:" Height="31" HorizontalAlignment="Left" Margin="11,585,0,0" Name="pluser" VerticalAlignment="Top" FontSize="14" Width="133" />
+        <Label Content="Correct answers:" HorizontalAlignment="Left" Margin="11,0,0,34" Name="pluser" FontSize="14" Width="133" Height="31" VerticalAlignment="Bottom" />
         <Label HorizontalAlignment="Left" Margin="493,0,0,36" Name="lbRefine" Width="296" FontSize="20" FontWeight="Bold" Foreground="#FFFC7E7E" Height="36" VerticalAlignment="Bottom" Content="vasea" />
-        <ProgressBar Height="25" HorizontalAlignment="Left" Margin="424,0,0,12" Name="pbPenalties" Value="1" VerticalAlignment="Bottom" Width="342" Foreground="Red" Maximum="50" />
-        <Label Content="Penalties:" FontSize="14" Height="31" HorizontalAlignment="Left" Margin="424,584,0,0" Name="label1" VerticalAlignment="Top" Width="75" />
+        <ProgressBar Height="25" HorizontalAlignment="Left" Margin="424,0,0,12" Name="pbPenalties" Value="1" VerticalAlignment="Bottom" Width="312" Foreground="Red" Maximum="50" />
+        <Label Content="Penalties:" FontSize="14" HorizontalAlignment="Left" Margin="424,0,0,35" Name="label1" Width="75" Height="31" VerticalAlignment="Bottom" />
+        <TabControl Margin="0,0,37,54" Name="tabControl1" Background="{x:Null}" BorderBrush="{x:Null}" Height="537" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="437">
+            <TabItem Header="Free run" Name="tabFree">
+                <Grid Background="{x:Null}" OpacityMask="{x:Null}">
+                    <TextBox HorizontalAlignment="Left" Margin="18,15,0,0" Name="tbMovesTodo" Width="408" Text="(y2) L' U' L (y') R2' u (R' U R U' R) u' R2" FontSize="24" FontWeight="Normal" Height="40" VerticalAlignment="Top" />
+                    <Rectangle Height="39" HorizontalAlignment="Left" Margin="25,123,0,0" Name="left0" Stroke="Black" VerticalAlignment="Top" Width="41" />
+                    <Rectangle Height="39" HorizontalAlignment="Left" Margin="95,123,0,0" Name="left1" Stroke="Black" VerticalAlignment="Top" Width="41" />
+                    <Rectangle Height="39" HorizontalAlignment="Left" Margin="163,261,0,0" Name="left8" Stroke="Black" VerticalAlignment="Top" Width="41" />
+                    <Rectangle Height="39" HorizontalAlignment="Left" Margin="95,261,0,0" Name="left7" Stroke="Black" VerticalAlignment="Top" Width="41" />
+                    <Rectangle Height="39" HorizontalAlignment="Left" Margin="25,261,0,0" Name="left6" Stroke="Black" VerticalAlignment="Top" Width="41" />
+                    <Rectangle Height="39" HorizontalAlignment="Left" Margin="163,195,0,0" Name="left5" Stroke="Black" VerticalAlignment="Top" Width="41" />
+                    <Rectangle Height="39" HorizontalAlignment="Left" Margin="95,195,0,0" Name="left4" Stroke="Black" VerticalAlignment="Top" Width="41" />
+                    <Rectangle Height="39" HorizontalAlignment="Left" Margin="25,195,0,0" Name="left3" Stroke="Black" VerticalAlignment="Top" Width="41" />
+                    <Rectangle Height="39" HorizontalAlignment="Left" Margin="163,123,0,0" Name="left2" Stroke="Black" VerticalAlignment="Top" Width="41" />
+                    <Rectangle Height="39" HorizontalAlignment="Left" Margin="239,123,0,0" Name="back0" Stroke="Black" VerticalAlignment="Top" Width="41" />
+                    <Rectangle Height="39" HorizontalAlignment="Left" Margin="309,123,0,0" Name="back1" Stroke="Black" VerticalAlignment="Top" Width="41" />
+                    <Rectangle Height="39" HorizontalAlignment="Left" Margin="377,261,0,0" Name="back8" Stroke="Black" VerticalAlignment="Top" Width="41" />
+                    <Rectangle Height="39" HorizontalAlignment="Left" Margin="309,261,0,0" Name="back7" Stroke="Black" VerticalAlignment="Top" Width="41" />
+                    <Rectangle Height="39" HorizontalAlignment="Left" Margin="239,261,0,0" Name="back6" Stroke="Black" VerticalAlignment="Top" Width="41" />
+                    <Rectangle Height="39" HorizontalAlignment="Left" Margin="377,195,0,0" Name="back5" Stroke="Black" VerticalAlignment="Top" Width="41" />
+                    <Rectangle Height="39" HorizontalAlignment="Left" Margin="309,195,0,0" Name="back4" Stroke="Black" VerticalAlignment="Top" Width="41" />
+                    <Rectangle Height="39" HorizontalAlignment="Left" Margin="239,195,0,0" Name="back3" Stroke="Black" VerticalAlignment="Top" Width="41" />
+                    <Rectangle Height="39" HorizontalAlignment="Left" Margin="377,123,0,0" Name="back2" Stroke="Black" VerticalAlignment="Top" Width="41" />
+                    <Rectangle Height="39" HorizontalAlignment="Left" Margin="239,324,0,0" Name="down0" Stroke="Black" VerticalAlignment="Top" Width="41" />
+                    <Rectangle Height="39" HorizontalAlignment="Left" Margin="309,324,0,0" Name="down1" Stroke="Black" VerticalAlignment="Top" Width="41" />
+                    <Rectangle Height="39" HorizontalAlignment="Left" Margin="377,462,0,0" Name="down8" Stroke="Black" VerticalAlignment="Top" Width="41" />
+                    <Rectangle Height="39" HorizontalAlignment="Left" Margin="309,462,0,0" Name="down7" Stroke="Black" VerticalAlignment="Top" Width="41" />
+                    <Rectangle Height="39" HorizontalAlignment="Left" Margin="239,462,0,0" Name="down6" Stroke="Black" VerticalAlignment="Top" Width="41" />
+                    <Rectangle Height="39" HorizontalAlignment="Left" Margin="377,396,0,0" Name="down5" Stroke="Black" VerticalAlignment="Top" Width="41" />
+                    <Rectangle Height="39" HorizontalAlignment="Left" Margin="309,396,0,0" Name="down4" Stroke="Black" VerticalAlignment="Top" Width="41" />
+                    <Rectangle Height="39" HorizontalAlignment="Left" Margin="239,396,0,0" Name="down3" Stroke="Black" VerticalAlignment="Top" Width="41" />
+                    <Rectangle Height="39" HorizontalAlignment="Left" Margin="377,324,0,0" Name="down2" Stroke="Black" VerticalAlignment="Top" Width="41" />
+                    <Button Content="Execute" Height="42" HorizontalAlignment="Left" Margin="18,65,0,0" Name="btExecute" VerticalAlignment="Top" Width="294" Click="click_execute" />
+                    <Button Content="Reset stickers" Height="42" HorizontalAlignment="Left" Margin="317,65,0,0" Name="btReset" VerticalAlignment="Top" Width="109" Click="click_reset" />
+                </Grid>
+            </TabItem>
+            <TabItem Header="PLL" Name="tabPll">
+                <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <GroupBox FontSize="16" Header="Correct:" Height="125" HorizontalAlignment="Left" Margin="10,4,0,0" Name="gbCorrect" VerticalAlignment="Top" Width="202">
+                        <Grid>
+                            <CheckBox Content="H" FontSize="13" FontWeight="Bold" Height="18" HorizontalAlignment="Left" IsChecked="True" Margin="24,15,0,0" Name="cbH" VerticalAlignment="Top" Width="44">
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                            <CheckBox Content="Ua" FontSize="13" FontWeight="Bold" Height="19" HorizontalAlignment="Left" IsChecked="True" Margin="24,39,0,0" Name="cbUa" VerticalAlignment="Top" Width="44">
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                            <CheckBox Content="Z" FontSize="13" FontWeight="Bold" Height="18" HorizontalAlignment="Left" IsChecked="True" Margin="24,66,0,0" Name="cbZ" VerticalAlignment="Top" Width="44">
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                            <CheckBox Content="Ub" FontSize="13" FontWeight="Bold" Height="19" HorizontalAlignment="Left" IsChecked="True" Margin="96,39,0,0" Name="cbUb" VerticalAlignment="Top" Width="44">
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                            <CheckBox Checked="click_group_Correct" FontSize="13" FontWeight="Bold" Height="18" HorizontalAlignment="Left" IsChecked="True" Margin="157,-20,0,0" Name="cbCorrect" Unchecked="click_group_Correct" VerticalAlignment="Top" Width="19">
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox FontSize="16" Header="Diagonal:" Height="125" HorizontalAlignment="Left" Margin="227,4,0,0" Name="gbDiagonal" VerticalAlignment="Top" Width="196">
+                        <Grid>
+                            <CheckBox Content="V" FontSize="13" FontWeight="Bold" Height="18" HorizontalAlignment="Left" IsChecked="True" Margin="22,10,0,0" Name="cbV" VerticalAlignment="Top" Width="44">
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                            <CheckBox Content="Na" FontSize="13" FontWeight="Bold" Height="19" HorizontalAlignment="Left" IsChecked="True" Margin="22,35,0,0" Name="cbNa" VerticalAlignment="Top" Width="44">
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                            <CheckBox Content="Y" FontSize="13" FontWeight="Bold" Height="18" HorizontalAlignment="Left" IsChecked="True" Margin="99,9,0,0" Name="cbY" VerticalAlignment="Top" Width="44">
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                            <CheckBox Content="Nb" FontSize="13" FontWeight="Bold" Height="19" HorizontalAlignment="Left" IsChecked="True" Margin="99,35,0,0" Name="cbNb" VerticalAlignment="Top" Width="44">
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                            <CheckBox Content="E" FontSize="13" FontWeight="Bold" Height="18" HorizontalAlignment="Left" IsChecked="True" Margin="23,64,0,0" Name="cbE" VerticalAlignment="Top" Width="66">
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                            <CheckBox Checked="click_group_Diagonal" FontSize="13" FontWeight="Bold" Height="18" HorizontalAlignment="Left" IsChecked="True" Margin="158,-22,0,0" Name="cbDiagonal" Unchecked="click_group_Diagonal" VerticalAlignment="Top" Width="19">
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox FontSize="16" Header="Adjacent:" Height="212" HorizontalAlignment="Left" Margin="16,135,0,0" Name="gbAdjacent" VerticalAlignment="Top" Width="196">
+                        <Grid>
+                            <CheckBox Content="Ga" FontSize="13" FontWeight="Bold" Height="18" HorizontalAlignment="Left" IsChecked="True" Margin="13,9,0,0" Name="cbGa" VerticalAlignment="Top" Width="44">
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                            <CheckBox Content="Ja" FontSize="13" FontWeight="Bold" Height="19" HorizontalAlignment="Left" IsChecked="True" Margin="18,119,0,0" Name="cbJa" VerticalAlignment="Top" Width="44">
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                            <CheckBox Content="T" FontSize="13" FontWeight="Bold" Height="18" HorizontalAlignment="Left" IsChecked="True" Margin="39,93,0,0" Name="cbT" VerticalAlignment="Top" Width="44">
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                            <CheckBox Content="Jb" FontSize="13" FontWeight="Bold" Height="19" HorizontalAlignment="Left" IsChecked="True" Margin="118,120,0,0" Name="cbJb" VerticalAlignment="Top" Width="44">
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                            <CheckBox Content="F" FontSize="13" FontWeight="Bold" Height="18" HorizontalAlignment="Left" IsChecked="True" Margin="99,93,0,0" Name="cbF" VerticalAlignment="Top" Width="44">
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                            <CheckBox Content="Gb" FontSize="13" FontWeight="Bold" Height="18" HorizontalAlignment="Left" IsChecked="True" Margin="112,8,0,0" Name="cbGb" VerticalAlignment="Top" Width="41">
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                            <CheckBox Content="Gc" FontSize="13" FontWeight="Bold" Height="18" HorizontalAlignment="Left" IsChecked="True" Margin="14,36,0,0" Name="cbGc" VerticalAlignment="Top" Width="44">
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                            <CheckBox Content="Gd" FontSize="13" FontWeight="Bold" Height="18" HorizontalAlignment="Left" IsChecked="True" Margin="112,35,0,0" Name="cbGd" VerticalAlignment="Top" Width="45">
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                            <CheckBox Content="Aa" FontSize="13" FontWeight="Bold" Height="19" HorizontalAlignment="Left" IsChecked="True" Margin="15,65,0,0" Name="cbAa" VerticalAlignment="Top" Width="44">
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                            <CheckBox Content="Ab" FontSize="13" FontWeight="Bold" Height="19" HorizontalAlignment="Left" IsChecked="True" Margin="116,64,0,0" Name="cbAb" VerticalAlignment="Top" Width="44">
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                            <CheckBox Content="Ra" FontSize="13" FontWeight="Bold" Height="19" HorizontalAlignment="Left" IsChecked="True" Margin="18,152,0,0" Name="cbRa" VerticalAlignment="Top" Width="44">
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                            <CheckBox Content="Rb" FontSize="13" FontWeight="Bold" Height="19" HorizontalAlignment="Left" IsChecked="True" Margin="117,152,0,0" Name="cbRb" VerticalAlignment="Top" Width="44">
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                            <CheckBox Checked="click_group_Anjacent" FontSize="13" FontWeight="Bold" Height="18" HorizontalAlignment="Left" IsChecked="True" Margin="146,-22,0,0" Name="cbAdjacent" Unchecked="click_group_Anjacent" VerticalAlignment="Top" Width="19">
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                        </Grid>
+                    </GroupBox>
+                    <Button Click="click_startPractice" Content="Start" FontSize="20" Height="36" HorizontalAlignment="Left" Margin="22,370,0,0" Name="btStart" VerticalAlignment="Top" Width="181" />
+                    <ComboBox FontSize="20" Height="36" HorizontalAlignment="Left" Margin="26,433,0,0" Name="comPracticeSize" SelectedIndex="3" VerticalAlignment="Top" Width="93">
+                        <ComboBoxItem Content="10" />
+                        <ComboBoxItem Content="25" />
+                        <ComboBoxItem Content="50" />
+                        <ComboBoxItem Content="ALL-84 (once each)" />
+                    </ComboBox>
+                    <GroupBox FontSize="16" Header="View:" Height="202" HorizontalAlignment="Left" Margin="233,145,0,0" Name="gbView" VerticalAlignment="Top" Width="154">
+                        <Grid>
+                            <CheckBox Content="Face" FontSize="13" FontWeight="Bold" Height="18" HorizontalAlignment="Left" IsChecked="True" Margin="16,11,0,0" Name="cbFace" VerticalAlignment="Top" Width="59">
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                            <CheckBox Content="Right" FontSize="13" FontWeight="Bold" Height="18" HorizontalAlignment="Left" IsChecked="True" Margin="16,41,0,0" Name="cbRight" VerticalAlignment="Top" Width="58">
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                            <CheckBox Content="Back" FontSize="13" FontWeight="Bold" Height="18" HorizontalAlignment="Left" IsChecked="True" Margin="16,71,0,0" Name="cbBack" VerticalAlignment="Top" Width="64">
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                            <CheckBox Content="Left" FontSize="13" FontWeight="Bold" Height="18" HorizontalAlignment="Left" IsChecked="True" Margin="18,102,0,0" Name="cbLeft" VerticalAlignment="Top" Width="58">
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                            <CheckBox Content="F2L-AUF" FontSize="13" FontWeight="Bold" Height="18" HorizontalAlignment="Left" IsChecked="True" Margin="17,137,0,0" Name="cbF2Lauf" VerticalAlignment="Top" Width="78">
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                            <CheckBox Checked="click_group_View" FontSize="13" FontWeight="Bold" Height="18" HorizontalAlignment="Left" IsChecked="True" Margin="103,-24,0,0" Name="cbView" Unchecked="click_group_View" VerticalAlignment="Top" Width="19">
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox FontSize="16" Header="Top color:" Height="154" HorizontalAlignment="Left" Margin="227,354,0,0" Name="gbTopcolors" VerticalAlignment="Top" Width="196">
+                        <Grid>
+                            <CheckBox Content="White" FontSize="13" FontWeight="Bold" Height="15" HorizontalAlignment="Left" IsChecked="False" Margin="79,55,0,0" Name="cbWhite" VerticalAlignment="Top" Width="17">
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="2" ScaleY="2" />
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                            <CheckBox Background="#FFFF1010" Content="Red" FontSize="13" FontWeight="Bold" Height="16" HorizontalAlignment="Left" IsChecked="False" Margin="59,94,0,0" Name="cbRed" VerticalAlignment="Top" Width="17">
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="2" ScaleY="2" />
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                            <CheckBox Background="#FF00B700" Content="Green" FontSize="13" FontWeight="Bold" Height="18" HorizontalAlignment="Left" IsChecked="False" Margin="126,45,0,0" Name="cbGreen" VerticalAlignment="Top" Width="17">
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="2" ScaleY="2" />
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                            <CheckBox Background="#FFFF9D00" Content="Orange" FontSize="13" FontWeight="Bold" Height="18" HorizontalAlignment="Left" IsChecked="False" Margin="83,-2,0,0" Name="cbOrange" VerticalAlignment="Top" Width="18">
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="2" ScaleY="2" />
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                            <CheckBox Checked="click_group_Topcolor" FontSize="13" FontWeight="Bold" Height="18" HorizontalAlignment="Left" IsChecked="False" Margin="146,-20,0,0" Name="cbTopcolors" Unchecked="click_group_Topcolor" VerticalAlignment="Top" Width="19">
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                            <CheckBox Background="#FF5561FF" Content="Blue" FontSize="13" FontWeight="Bold" Height="16" HorizontalAlignment="Left" IsChecked="False" Margin="16,44,0,0" Name="cbBlue" VerticalAlignment="Top" Width="18">
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="2" ScaleY="2" />
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                            <CheckBox Background="#FFD2FF00" Content="Yellow" FontSize="13" FontWeight="Bold" Height="16" HorizontalAlignment="Left" IsChecked="True" Margin="63,36,0,0" Name="cbYellow" VerticalAlignment="Top" Width="17">
+                                <CheckBox.LayoutTransform>
+                                    <ScaleTransform ScaleX="2" ScaleY="2" />
+                                </CheckBox.LayoutTransform>
+                            </CheckBox>
+                        </Grid>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+            <TabItem Header="F2L" Name="tabF2l">
+                <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></Grid>
+            </TabItem>
+            <TabItem Header="OLL" Name="tabOll" />
+        </TabControl>
     </Grid>
 </Window>
