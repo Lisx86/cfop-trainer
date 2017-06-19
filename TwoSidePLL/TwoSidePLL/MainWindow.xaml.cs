@@ -336,5 +336,10 @@ namespace CfopTrainer {
 
         }
 
+        private void TreeViewItem_Selected(object sender, RoutedEventArgs e)
+        {
+
+        }
+
     }//cl
 }//ns
