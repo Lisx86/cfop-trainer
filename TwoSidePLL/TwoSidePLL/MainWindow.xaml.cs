@@ -14,7 +14,7 @@ using System.Windows.Shapes;
 
 namespace CfopTrainer { 
     public partial class MainWindow : Window {
-        Cube theCube;                                    // the heart of the program
+        Cube theCube = new Cube();                       // the heart of the program (created once, and lives until the close)
         PLLManager practicer;                            // Pll practice manager
         Dictionary<Side, List<Polygon>>   uiData;        // Visible stickers set
         Dictionary<Side, List<Rectangle>> uiBackView;    // Invisible stickers set
@@ -139,7 +139,6 @@ namespace CfopTrainer {
             uiBackView[Side.Down].Add(down6);
             uiBackView[Side.Down].Add(down7);
             uiBackView[Side.Down].Add(down8);
-            theCube = new Cube();
             updateGui();
         }
 
@@ -253,34 +252,28 @@ namespace CfopTrainer {
                 ControlsEnabled   = false; // disable controls while guessing
             }//if
         }
+
+        HashSet<Key> keysPressed = new HashSet<Key>();
         private void keyDown(object sender, KeyEventArgs e) {
-            
-            if (practicer.Running && e.Key.ToString().Length == 1) {
-                char ch = char.ToLower(e.Key.ToString()[0]);
-                Title += ch;  
+            if(!keysPressed.Contains(e.Key)) {
+                Title += "vv ";
+                keysPressed.Add(e.Key);
+                 switch (e.Key){
+                    case Key.Left:  theCube.execute("y'");   updateGui();  break;
+                    case Key.Right: theCube.execute("y");   updateGui();  break;
+                }
+            }
 
-                if (practicer.verify(ch)) { // verify 
-                    pbTasks.Value++;
-                     pbPenalties.Value = practicer.PenaltiesCount;
-                } else {
-                    pbTasks.Value++;
-                    lbRefine.Content += " " + practicer.CurrentTask.getName();
-                    if(pbPenalties.Maximum - pbPenalties.Value >= 3) {
-                        // save the penality and update the penality bar
-                        pbPenalties.Value = practicer.savePenalty(2); // adds penality: failed task +3 more;
-                    }
-                }//ei
-
-                if(practicer.nextScramble()) {// go next guess
-                    updateGui();               // show it
-                } else {
-                    practicer.Running = false;
-                    ControlsEnabled   = true; // enable back the controls
-                    Title = practicer.LastRun;
-
-                    practicer = null; // destroy the practicer
-                }//ei
-            }//if
+        }
+        private void keyUp(object sender, KeyEventArgs e) {
+            if(keysPressed.Contains(e.Key)) {
+                keysPressed.Remove(e.Key);
+                Title += "^^ ";
+                switch (e.Key){
+                    case Key.Left:  theCube.execute("y");   updateGui();  break;
+                    case Key.Right: theCube.execute("y'");   updateGui();  break;
+                }
+            }//IF
         }
         private void click_group_Correct(object sender, RoutedEventArgs e)
         {
@@ -342,5 +335,6 @@ namespace CfopTrainer {
         {
 
         }
+
     }//cl
 }//ns
